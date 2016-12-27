@@ -1,4 +1,6 @@
-﻿namespace Jal.Monads
+﻿using System;
+
+namespace Jal.Monads
 {
     public sealed class Result<T> : Result
     {
@@ -6,11 +8,21 @@
 
         public Result(T content) : base(true, new string[] { })
         {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
             Content = content;
         }
 
         public Result(string[] errors) : base(false, errors)
         {
+            if (errors == null)
+            {
+                throw new ArgumentNullException(nameof(errors));
+            }
+
             Content = default(T);
         }
 

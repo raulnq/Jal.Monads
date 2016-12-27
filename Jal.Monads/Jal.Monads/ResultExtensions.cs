@@ -30,6 +30,27 @@ namespace Jal.Monads
             }
         }
 
+        public static TOutput Return<TOutput>(this Result result, Func<TOutput> onsuccess, Func<string, TOutput> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess();
+            }
+            else
+            {
+                return onfailure(string.Join(",", result.Errors));
+            }
+        }
+
         public static TOutput Return<TInput, TOutput>(this Result<TInput> result, Func<TInput, TOutput> onsuccess, Func<string[], TOutput> onfailure)
         {
             if (onfailure == null)
@@ -44,6 +65,27 @@ namespace Jal.Monads
             if (result.IsSuccess)
             {
                 return onsuccess(result.Content);
+            }
+            else
+            {
+                return onfailure(result.Errors);
+            }
+        }
+
+        public static TOutput Return<TOutput>(this Result result, Func<TOutput> onsuccess, Func<string[], TOutput> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess();
             }
             else
             {
@@ -126,6 +168,22 @@ namespace Jal.Monads
             if (result.IsSuccess)
             {
                 return onsuccess();
+            }
+
+            return Result.Failure(result.Errors);
+        }
+
+        //Bind
+        public static Result OnSuccess<TInput>(this Result<TInput> result, Func<TInput, Result> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess(result.Content);
             }
 
             return Result.Failure(result.Errors);
@@ -237,7 +295,7 @@ namespace Jal.Monads
                 {
                     return onelse(result.Content).ToResult();
                 }
-                
+
             }
 
             return new Result<TOutput>(result.Errors);
