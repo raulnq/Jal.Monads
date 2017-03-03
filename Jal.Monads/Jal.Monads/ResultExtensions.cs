@@ -94,7 +94,7 @@ namespace Jal.Monads
         }
 
         //Tee
-        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Action<TInput> onfailure)
+        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Action<string[]> onfailure)
         {
             if (onfailure == null)
             {
@@ -103,7 +103,7 @@ namespace Jal.Monads
 
             if (result.IsFailure)
             {
-                onfailure(result.Content);
+                onfailure(result.Errors);
             }
 
             return result;
@@ -362,6 +362,53 @@ namespace Jal.Monads
             var result = new T[first.Length + second.Length];
             Array.Copy(first, result, first.Length);
             Array.Copy(second, 0, result, first.Length, second.Length);
+            return result;
+        }
+        //Bind
+        public static Result OnFailure(this Result result, Func<string[], Result> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsFailure)
+            {
+                return onfailure(result.Errors);
+            }
+
+            return result;
+        }
+
+        //Bind
+        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Func<string[], Result<TInput>> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsFailure)
+            {
+                return onfailure(result.Errors);
+            }
+
+            return result;
+        }
+
+        //Map
+        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Func<string[], TInput> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsFailure)
+            {
+                return onfailure(result.Errors).ToResult();
+            }
+
             return result;
         }
     }
