@@ -190,6 +190,38 @@ namespace Jal.Monads
         }
 
         //Bind
+        public static Result OnSuccess<TInput>(this Result<TInput> result, Func<TInput, bool> condition, Func<TInput, Result> onif, Func<TInput, Result> onelse)
+        {
+            if (condition == null)
+            {
+                throw new ArgumentNullException(nameof(condition));
+            }
+            if (onif == null)
+            {
+                throw new ArgumentNullException(nameof(onif));
+            }
+
+            if (onelse == null)
+            {
+                throw new ArgumentNullException(nameof(onelse));
+            }
+
+            if (result.IsSuccess)
+            {
+                if (condition(result.Content))
+                {
+                    return onif(result.Content);
+                }
+                else
+                {
+                    return onelse(result.Content);
+                }
+            }
+
+            return Result.Failure(result.Errors);
+        }
+
+        //Bind
         public static Result<TOutput> OnSuccess<TOutput>(this Result result, Func<Result<TOutput>> onsuccess)
         {
             if (onsuccess == null)
@@ -302,16 +334,49 @@ namespace Jal.Monads
         }
 
         //Monitor
-        public static Result<TInput> OnBoth<TInput>(this Result<TInput> result, Action<TInput> onboth)
+        public static Result<TOutput> OnBoth<TInput, TOutput>(this Result<TInput> result, Func<TInput, Result<TOutput>> onsuccess, Func<string[], Result<TOutput>> onfailure)
         {
-            if (onboth == null)
+            if (onsuccess == null)
             {
-                throw new ArgumentNullException(nameof(onboth));
+                throw new ArgumentNullException(nameof(onsuccess));
             }
 
-            onboth(result.Content);
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
 
-            return result;
+            if (result.IsSuccess)
+            {
+                return onsuccess(result.Content);
+            }
+            else
+            {
+                return onfailure(result.Errors);
+            }
+        }
+
+        //Monitor
+        public static Result OnBoth<TInput>(this Result<TInput> result, Func<TInput, Result> onsuccess, Func<string[], Result> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess(result.Content);
+            }
+            else
+            {
+                return onfailure(result.Errors);
+            }
         }
 
         //Monitor
@@ -323,6 +388,31 @@ namespace Jal.Monads
             }
 
             onboth();
+
+            return result;
+        }
+
+        //Monitor
+        public static Result OnBoth(this Result result, Action onsuccess, Action<string[]> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsSuccess)
+            {
+                onsuccess();
+            }
+            else
+            {
+                onfailure(result.Errors);
+            }
 
             return result;
         }
