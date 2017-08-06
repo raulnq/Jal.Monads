@@ -357,6 +357,19 @@ namespace Jal.Monads
         }
 
         //Monitor
+        public static Result<TInput> OnBoth<TInput>(this Result<TInput> result, Action onboth)
+        {
+            if (onboth == null)
+            {
+                throw new ArgumentNullException(nameof(onboth));
+            }
+
+            onboth();
+
+            return result;
+        }
+
+        //Monitor
         public static Result OnBoth<TInput>(this Result<TInput> result, Func<TInput, Result> onsuccess, Func<string[], Result> onfailure)
         {
             if (onsuccess == null)
@@ -417,6 +430,31 @@ namespace Jal.Monads
             return result;
         }
 
+        //Monitor
+        public static Result<TInput> OnBoth<TInput>(this Result<TInput> result, Action onsuccess, Action<string[]> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsSuccess)
+            {
+                onsuccess();
+            }
+            else
+            {
+                onfailure(result.Errors);
+            }
+
+            return result;
+        }
+
         public static Result Merge(this Result first, Result second)
         {
             if (first.IsSuccess && second.IsSuccess)
@@ -426,16 +464,6 @@ namespace Jal.Monads
 
             return Result.Failure(Merge(first.Errors, second.Errors));
         }
-
-        //public static Result<TSecond> MergeKeepSecond<TFirst, TSecond>(this Result<TFirst> first, Result<TSecond> second)
-        //{
-        //    if (first.IsSuccess && second.IsSuccess)
-        //    {
-        //        return second;
-        //    }
-
-        //    return new Result<TSecond>(Merge(first.Errors, second.Errors));
-        //}
 
         public static Result<TFirst> Merge<TFirst, TSecond>(this Result<TFirst> first, Result<TSecond> second)
         {
