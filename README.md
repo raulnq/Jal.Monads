@@ -4,14 +4,10 @@ Just another library that implement monads
 
 ## Result
 
-This is like the Either monad but limited to return a array of strings in the left side.
-
-I want to explain what we are trying to solve with this monad using a example:
-
-We need to create a class to do the following:
+The Result class is like the Either monad but limited to return an array of strings in the left side. I want to explain what we are trying to solve using the following example. Imagine that we need to create a class to do the following:
 * Search a client by id.
 * Search his account summary.
-* Validate that are enough credit to charge the new amount.
+* Validate that are enough credit to charge some new amount.
 * Charge the amount.
 * Notity the client about the successful transaction.
 
@@ -73,7 +69,7 @@ A first class to fulfil the requirements could be
         }
     }
 
-But in a real application this code is not enough to cover all the possible scenarios that could be happen during the execution, ending with a code something like this
+But in a real application this code is not enough to cover all the possible scenarios that could happen during its execution, ending with a code something like this
 
     public bool ChargeMoney(int id, decimal amount)
     {
@@ -117,7 +113,7 @@ But in a real application this code is not enough to cover all the possible scen
         }
     }
 
-Now the code is not easy to follow like the original one, but as you see there a lot of repetitive piece of code suggesting some sort of code smell in our implementation. It's here where the Result class come to rescue us.
+Now we lost something, the code is not easy to follow like the original one. As you see there a lot of repetitive piece of code suggesting some sort of code smell in our implementation. It's here where the Result class come to rescue us.
 
     public class Result
     {
@@ -133,7 +129,7 @@ Now the code is not easy to follow like the original one, but as you see there a
         public T Content { get; }
     }
  
-The trick here is start to return this class on every method on your code in order to build a chain of execution thanks to the following extension methods:
+The trick here is start to return the Result class on every method on your code in order to build a chain of execution thanks to the following extension methods:
 
 * OnSuccess: The code on this method will be executed only if the IsSuccess flag of the prior execution is true.
 * OnFailure: The code on this method will be executed only if the IsFailure flag of the prior execution is true.
