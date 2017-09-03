@@ -110,6 +110,21 @@ namespace Jal.Monads
         }
 
         //Tee
+        public static Result OnFailure(this Result result, Action<string[]> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsFailure)
+            {
+                onfailure(result.Errors);
+            }
+
+            return result;
+        }
+
         public static Result OnFailure(this Result result, Action onfailure)
         {
             if (onfailure == null)
