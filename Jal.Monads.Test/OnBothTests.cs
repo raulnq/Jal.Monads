@@ -258,7 +258,7 @@ namespace Jal.Monads.Test
                     executed = true;
                 });
 
-            SuccessEval(result, executed);
+            FailureEval(result, !executed);
         }
 
         [Test]
@@ -296,7 +296,7 @@ namespace Jal.Monads.Test
                     executed = true;
                 });
 
-            SuccessEval(result, executed);
+            FailureEval(result, !executed);
         }
     }
 }

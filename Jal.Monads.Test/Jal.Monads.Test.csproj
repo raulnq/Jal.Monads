@@ -55,6 +55,7 @@
     <Compile Include="OnFailureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OnSuccessTests.cs" />
+    <Compile Include="ReturnTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
