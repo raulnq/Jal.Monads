@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace Jal.Monads.Test
 {
-
     public interface IPersonRepository
     {
         Person Find(int id);

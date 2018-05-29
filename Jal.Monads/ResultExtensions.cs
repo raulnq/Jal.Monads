@@ -125,7 +125,8 @@ namespace Jal.Monads
             return result;
         }
 
-        public static Result OnFailure(this Result result, Action onfailure)
+        //Bind
+        public static Result OnFailure(this Result result, Func<string[], Result> onfailure)
         {
             if (onfailure == null)
             {
@@ -134,12 +135,59 @@ namespace Jal.Monads
 
             if (result.IsFailure)
             {
-                onfailure();
+                return onfailure(result.Errors);
             }
 
             return result;
         }
 
+        public static Result OnFailure<TInput>(this Result<TInput> result, Func<string[], Result> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsFailure)
+            {
+                return onfailure(result.Errors);
+            }
+
+            return result;
+        }
+
+        //Bind
+        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Func<string[], Result<TInput>> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsFailure)
+            {
+                return onfailure(result.Errors);
+            }
+
+            return result;
+        }
+
+        //Map
+        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Func<string[], TInput> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsFailure)
+            {
+                return onfailure(result.Errors).ToResult();
+            }
+
+            return result;
+        }
+   
         //Tee
         public static Result<TInput> OnSuccess<TInput>(this Result<TInput> result, Action<TInput> onsuccess)
         {
@@ -204,39 +252,6 @@ namespace Jal.Monads
             return Result.Failure(result.Errors);
         }
 
-        //Bind
-        public static Result OnSuccess<TInput>(this Result<TInput> result, Func<TInput, bool> condition, Func<TInput, Result> onif, Func<TInput, Result> onelse)
-        {
-            if (condition == null)
-            {
-                throw new ArgumentNullException(nameof(condition));
-            }
-            if (onif == null)
-            {
-                throw new ArgumentNullException(nameof(onif));
-            }
-
-            if (onelse == null)
-            {
-                throw new ArgumentNullException(nameof(onelse));
-            }
-
-            if (result.IsSuccess)
-            {
-                if (condition(result.Content))
-                {
-                    return onif(result.Content);
-                }
-                else
-                {
-                    return onelse(result.Content);
-                }
-            }
-
-            return Result.Failure(result.Errors);
-        }
-
-        //Bind
         public static Result<TOutput> OnSuccess<TOutput>(this Result result, Func<Result<TOutput>> onsuccess)
         {
             if (onsuccess == null)
@@ -268,39 +283,6 @@ namespace Jal.Monads
             return new Result<TOutput>(result.Errors);
         }
 
-        //Bind
-        public static Result<TOutput> OnSuccess<TInput, TOutput>(this Result<TInput> result, Func<TInput, bool> condition, Func<TInput, Result<TOutput>> onif, Func<TInput, Result<TOutput>> onelse)
-        {
-            if (condition == null)
-            {
-                throw new ArgumentNullException(nameof(condition));
-            }
-            if (onif == null)
-            {
-                throw new ArgumentNullException(nameof(onif));
-            }
-            if (onelse == null)
-            {
-                throw new ArgumentNullException(nameof(onelse));
-            }
-
-            if (result.IsSuccess)
-            {
-                if (condition(result.Content))
-                {
-                    return onif(result.Content);
-                }
-                else
-                {
-                    return onelse(result.Content);
-                }
-
-            }
-
-            return new Result<TOutput>(result.Errors);
-        }
-
-        //Map
         public static Result<TOutput> OnSuccess<TInput, TOutput>(this Result<TInput> result, Func<TInput, TOutput> onsuccess)
         {
             if (onsuccess == null)
@@ -316,39 +298,6 @@ namespace Jal.Monads
             return new Result<TOutput>(result.Errors);
         }
 
-        //Map
-        public static Result<TOutput> OnSuccess<TInput, TOutput>(this Result<TInput> result, Func<TInput, bool> condition, Func<TInput, TOutput> onif, Func<TInput, TOutput> onelse)
-        {
-            if (condition == null)
-            {
-                throw new ArgumentNullException(nameof(condition));
-            }
-            if (onif == null)
-            {
-                throw new ArgumentNullException(nameof(onif));
-            }
-            if (onelse == null)
-            {
-                throw new ArgumentNullException(nameof(onelse));
-            }
-
-            if (result.IsSuccess)
-            {
-                if (condition(result.Content))
-                {
-                    return onif(result.Content).ToResult();
-                }
-                else
-                {
-                    return onelse(result.Content).ToResult();
-                }
-
-            }
-
-            return new Result<TOutput>(result.Errors);
-        }
-
-        //Monitor
         public static Result<TOutput> OnBoth<TInput, TOutput>(this Result<TInput> result, Func<TInput, Result<TOutput>> onsuccess, Func<string[], Result<TOutput>> onfailure)
         {
             if (onsuccess == null)
@@ -400,6 +349,52 @@ namespace Jal.Monads
             if (result.IsSuccess)
             {
                 return onsuccess(result.Content);
+            }
+            else
+            {
+                return onfailure(result.Errors);
+            }
+        }
+
+        //Monitor
+        public static Result OnBoth<TInput>(this Result<TInput> result, Func<TInput, Result<TInput>> onsuccess, Func<string[], Result<TInput>> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess(result.Content);
+            }
+            else
+            {
+                return onfailure(result.Errors);
+            }
+        }
+
+        //Monitor
+        public static Result OnBoth(this Result result, Func<Result> onsuccess, Func<string[], Result> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess();
             }
             else
             {
@@ -495,53 +490,6 @@ namespace Jal.Monads
             var result = new T[first.Length + second.Length];
             Array.Copy(first, result, first.Length);
             Array.Copy(second, 0, result, first.Length, second.Length);
-            return result;
-        }
-        //Bind
-        public static Result OnFailure(this Result result, Func<string[], Result> onfailure)
-        {
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsFailure)
-            {
-                return onfailure(result.Errors);
-            }
-
-            return result;
-        }
-
-        //Bind
-        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Func<string[], Result<TInput>> onfailure)
-        {
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsFailure)
-            {
-                return onfailure(result.Errors);
-            }
-
-            return result;
-        }
-
-        //Map
-        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Func<string[], TInput> onfailure)
-        {
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsFailure)
-            {
-                return onfailure(result.Errors).ToResult();
-            }
-
             return result;
         }
     }

@@ -56,6 +56,11 @@ namespace Jal.Monads
             return new Result(false, errors);
         }
 
+        public static Result Failure(string error)
+        {
+            return new Result(false, new []{ error });
+        }
+
         public static Result Success()
         {
             return new Result(true, new string[] { });
@@ -69,6 +74,11 @@ namespace Jal.Monads
         public static Result<TContent> Failure<TContent>(string[] errors)
         {
             return new Result<TContent>(errors);
+        }
+
+        public static Result<TContent> Failure<TContent>(string error)
+        {
+            return new Result<TContent>(new []{ error });
         }
     }
 }
