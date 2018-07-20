@@ -9,7 +9,7 @@ namespace Jal.Monads
             return Result.Failure(new []{content.Message, content.StackTrace});
         }
 
-        public static Result ToResult<TOutput>(this Exception content)
+        public static Result<TOutput> ToResult<TOutput>(this Exception content)
         {
             return Result.Failure<TOutput>(new[] { content.Message, content.StackTrace });
         }
