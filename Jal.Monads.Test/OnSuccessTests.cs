@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Jal.Monads.Test
 {
@@ -16,6 +17,7 @@ namespace Jal.Monads.Test
 
             SuccessEval(result, executed); 
         }
+
 
         [Test]
         public void OnSuccess_WithInputAndAction_ShouldNotBeExecuted()
@@ -68,6 +70,22 @@ namespace Jal.Monads.Test
             });
 
             SuccessEval(result, executed);
+        }
+
+        [Test]
+        public void OnAsyncSuccess_WithFunc_ShouldBeExecuted()
+        {
+            var executed = false;
+
+            var sut = Task.FromResult(Result.Success());
+
+            var result = sut.OnSuccessAsync(async () =>
+            {
+                executed = true;
+                return await Task.FromResult(Result.Success());
+            });
+
+            SuccessAsyncEval(result, executed);
         }
 
         [Test]
@@ -177,38 +195,6 @@ namespace Jal.Monads.Test
             {
                 executed = true;
                 return Result.Success<int?>(1);
-            });
-
-            FailureEval(result, executed);
-        }
-
-        [Test]
-        public void OnSuccess_WithInputAndFuncOutput_ShouldBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Success("");
-
-            var result = sut.OnSuccess(x =>
-            {
-                executed = true;
-                return (int?)(1);
-            });
-
-            SuccessEval(result, executed);
-        }
-
-        [Test]
-        public void OnSuccess_WithInputAndFuncOutput_ShouldNotBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Failure<string>("");
-
-            var result = sut.OnSuccess(x =>
-            {
-                executed = true;
-                return (int?)(1);
             });
 
             FailureEval(result, executed);

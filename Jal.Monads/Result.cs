@@ -10,7 +10,7 @@ namespace Jal.Monads
         {
             if (content == null)
             {
-                throw new ArgumentNullException(nameof(content));
+                throw new ArgumentNullException(nameof(content), "The content of a Result can be null");
             }
 
             Content = content;
@@ -20,7 +20,7 @@ namespace Jal.Monads
         {
             if (errors == null)
             {
-                throw new ArgumentNullException(nameof(errors));
+                throw new ArgumentNullException(nameof(errors), "The errors of a Result can be null");
             }
 
             Content = default(T);

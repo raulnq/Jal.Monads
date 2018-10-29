@@ -172,22 +172,6 @@ namespace Jal.Monads
             return result;
         }
 
-        //Map
-        public static Result<TInput> OnFailure<TInput>(this Result<TInput> result, Func<string[], TInput> onfailure)
-        {
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsFailure)
-            {
-                return onfailure(result.Errors).ToResult();
-            }
-
-            return result;
-        }
-   
         //Tee
         public static Result<TInput> OnSuccess<TInput>(this Result<TInput> result, Action<TInput> onsuccess)
         {
@@ -283,21 +267,6 @@ namespace Jal.Monads
             return new Result<TOutput>(result.Errors);
         }
 
-        public static Result<TOutput> OnSuccess<TInput, TOutput>(this Result<TInput> result, Func<TInput, TOutput> onsuccess)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
-            if (result.IsSuccess)
-            {
-                return onsuccess(result.Content).ToResult();
-            }
-
-            return new Result<TOutput>(result.Errors);
-        }
-
         public static Result<TOutput> OnBoth<TInput, TOutput>(this Result<TInput> result, Func<TInput, Result<TOutput>> onsuccess, Func<string[], Result<TOutput>> onfailure)
         {
             if (onsuccess == null)
@@ -335,29 +304,6 @@ namespace Jal.Monads
 
         //Monitor
         public static Result OnBoth<TInput>(this Result<TInput> result, Func<TInput, Result> onsuccess, Func<string[], Result> onfailure)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsSuccess)
-            {
-                return onsuccess(result.Content);
-            }
-            else
-            {
-                return onfailure(result.Errors);
-            }
-        }
-
-        //Monitor
-        public static Result OnBoth<TInput>(this Result<TInput> result, Func<TInput, Result<TInput>> onsuccess, Func<string[], Result<TInput>> onfailure)
         {
             if (onsuccess == null)
             {
