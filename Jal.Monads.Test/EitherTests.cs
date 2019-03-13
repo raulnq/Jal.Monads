@@ -8,13 +8,13 @@ namespace Jal.Monads.Test
     public class EitherTests
     {
         [TestMethod]
-        public void MatchRightWithAction_WithRightState_ShouldTrue()
+        public void Monitor_WithRightState_ShouldTrue()
         {
             var flag = false;
 
             var sut = Either.Right<string, int>(10);
 
-            var result = sut.MatchRight(right => { flag = true; });
+            var result = sut.Monitor((int right) => { flag = true; });
 
             flag.ShouldBeTrue();
 
@@ -28,13 +28,13 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchRightWithAction_WithLeftState_ShouldFalse()
+        public void Monitor_WithLeftState_ShouldFalse()
         {
             var flag = false;
 
             var sut = Either.Left<string, int>("ten");
 
-            var result = sut.MatchRight(left => { flag = true; });
+            var result = sut.Monitor((int left) => { flag = true; });
 
             flag.ShouldBeFalse();
 
@@ -48,7 +48,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchRightWithFunc_WithRightState_ShouldTrue()
+        public void Bind_WithRightState_ShouldTrue()
         {
             var flag = false;
 
@@ -56,7 +56,7 @@ namespace Jal.Monads.Test
 
             var date = DateTime.Now;
 
-            var result = sut.MatchRight(right => { flag = true; return date; });
+            var result = sut.Bind((int right) => { flag = true; return date; });
 
             flag.ShouldBeTrue();
 
@@ -70,7 +70,29 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchRightWithFunction_WithLeftState_ShouldFalse()
+        public void BindMonad_WithRightState_ShouldTrue()
+        {
+            var flag = false;
+
+            var sut = Either.Right<string, int>(10);
+
+            var date = DateTime.Now;
+
+            var result = sut.Bind((int right) => { flag = true; return Either.Right<string, DateTime>(date); });
+
+            flag.ShouldBeTrue();
+
+            result.IsLeft.ShouldBeFalse();
+
+            result.IsRight.ShouldBeTrue();
+
+            result.Right.ShouldBe(date);
+
+            result.Left.ShouldBe(default(string));
+        }
+
+        [TestMethod]
+        public void Bind_WithLeftState_ShouldFalse()
         {
             var flag = false;
 
@@ -78,7 +100,7 @@ namespace Jal.Monads.Test
 
             var date = DateTime.Now;
 
-            var result = sut.MatchRight(left => { flag = true; return date; });
+            var result = sut.Bind((int right) => { flag = true; return date; });
 
             flag.ShouldBeFalse();
 
@@ -92,13 +114,35 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchLefttWithAction_WithRightState_ShouldFalse()
+        public void BindMonad_WithLeftState_ShouldFalse()
+        {
+            var flag = false;
+
+            var sut = Either.Left<string, int>("ten");
+
+            var date = DateTime.Now;
+
+            var result = sut.Bind((int right) => { flag = true; return Either.Right<string, DateTime>(date); });
+
+            flag.ShouldBeFalse();
+
+            result.IsLeft.ShouldBeTrue();
+
+            result.IsRight.ShouldBeFalse();
+
+            result.Left.ShouldBe("ten");
+
+            result.Right.ShouldBe(default(DateTime));
+        }
+
+        [TestMethod]
+        public void Monitor_WithRightState_ShouldFalse()
         {
             var flag = false;
 
             var sut = Either.Right<string, int>(10);
 
-            var result = sut.MatchLeft(right => { flag = true; });
+            var result = sut.Monitor((string left) => { flag = true; });
 
             flag.ShouldBeFalse();
 
@@ -112,13 +156,13 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchLeftWithAction_WithLeftState_ShouldTrue()
+        public void Monitor_WithLeftState_ShouldTrue()
         {
             var flag = false;
 
             var sut = Either.Left<string, int>("ten");
 
-            var result = sut.MatchLeft(left => { flag = true; });
+            var result = sut.Monitor((string left) => { flag = true; });
 
             flag.ShouldBeTrue();
 
@@ -132,7 +176,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchLeftWithFunc_WithRightState_ShouldFalse()
+        public void Bind_WithRightState_ShouldFalse()
         {
             var flag = false;
 
@@ -140,7 +184,7 @@ namespace Jal.Monads.Test
 
             var date = DateTime.Now;
 
-            var result = sut.MatchLeft(right => { flag = true; return date; });
+            var result = sut.Bind((string left) => { flag = true; return date; });
 
             flag.ShouldBeFalse();
 
@@ -154,7 +198,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchLeftWithFunction_WithLeftState_ShouldTrue()
+        public void Bind_WithLeftState_ShouldTrue()
         {
             var flag = false;
 
@@ -162,7 +206,7 @@ namespace Jal.Monads.Test
 
             var date = DateTime.Now;
 
-            var result = sut.MatchLeft(left => { flag = true; return date; });
+            var result = sut.Bind((string left) => { flag = true; return date; });
 
             flag.ShouldBeTrue();
 
@@ -176,7 +220,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchWithAction_WithRightState_ShouldFalse()
+        public void MonitorLeftRight_WithRightState_ShouldFalse()
         {
             var rflag = false;
 
@@ -184,7 +228,7 @@ namespace Jal.Monads.Test
 
             var sut = Either.Right<string, int>(10);
 
-            var result = sut.Match(left => { lflag = true; }, right => { rflag = true;});
+            var result = sut.Monitor(left => { lflag = true; }, right => { rflag = true;});
 
             lflag.ShouldBeFalse();
 
@@ -200,7 +244,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchWithAction_WithLeftState_ShouldTrue()
+        public void MonitorLeftRight_WithLeftState_ShouldTrue()
         {
             var rflag = false;
 
@@ -208,7 +252,7 @@ namespace Jal.Monads.Test
 
             var sut = Either.Left<string, int>("ten");
 
-            var result = sut.Match(left => { lflag = true; }, right => { rflag = true; });
+            var result = sut.Monitor(left => { lflag = true; }, right => { rflag = true; });
 
             lflag.ShouldBeTrue();
 
@@ -232,7 +276,7 @@ namespace Jal.Monads.Test
 
             var sut = Either.Left<string, int>("ten");
 
-            var result = sut.Return(left => { lflag = true; return "L";  }, right => { rflag = true; return "R"; });
+            var result = sut.Match(left => { lflag = true; return "L";  }, right => { rflag = true; return "R"; });
 
             lflag.ShouldBeTrue();
 
@@ -250,7 +294,7 @@ namespace Jal.Monads.Test
 
             var sut = Either.Right<string, int>(10);
 
-            var result = sut.Return(left => { lflag = true; return "L"; }, right => { rflag = true; return "R"; });
+            var result = sut.Match(left => { lflag = true; return "L"; }, right => { rflag = true; return "R"; });
 
             lflag.ShouldBeFalse();
 
@@ -261,13 +305,13 @@ namespace Jal.Monads.Test
 
 
         [TestMethod]
-        public void Match_WithRightState_ShouldTrue()
+        public void MatchBoth_WithRightState_ShouldTrue()
         {
             var flag = false;
 
             var sut = Either.Right<string, int>(10);
 
-            var result = sut.Match(() => { flag = true; });
+            var result = sut.Monitor(() => { flag = true; });
 
             flag.ShouldBeTrue();
 
@@ -281,13 +325,13 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void Match_WithLefttState_ShouldTrue()
+        public void MatchBoth_WithLefttState_ShouldTrue()
         {
             var flag = false;
 
             var sut = Either.Left<string, int>("ten");
 
-            var result = sut.Match(() => { flag = true; });
+            var result = sut.Monitor(() => { flag = true; });
 
             flag.ShouldBeTrue();
 
