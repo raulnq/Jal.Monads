@@ -39,7 +39,7 @@ namespace Jal.Monads
             return e;
         }
 
-        public static async Task<Either<L, T>> BindAsync<L, R, T>(this Task<Either<L, R>> either, Func<R, T> onright)
+        public static async Task<Either<L, T>> MapAsync<L, R, T>(this Task<Either<L, R>> either, Func<R, T> onright)
         {
             if (onright == null)
             {
@@ -92,7 +92,7 @@ namespace Jal.Monads
             return new Either<L, T>(e.Left);
         }
 
-        public static async Task<Either<L, T>> BindAsync<L, R, T>(this Task<Either<L, R>> either, Func<R, Task<T>> onright)
+        public static async Task<Either<L, T>> MapAsync<L, R, T>(this Task<Either<L, R>> either, Func<R, Task<T>> onright)
         {
             if (onright == null)
             {
@@ -145,7 +145,7 @@ namespace Jal.Monads
             return e;
         }
 
-        public static async Task<Either<T, R>> BindAsync<L, R, T>(this Task<Either<L, R>> either, Func<L, T> onleft)
+        public static async Task<Either<T, R>> MapAsync<L, R, T>(this Task<Either<L, R>> either, Func<L, T> onleft)
         {
             if (onleft == null)
             {
@@ -181,7 +181,7 @@ namespace Jal.Monads
             return new Either<T, R>(e.Right);
         }
 
-        public static async Task<Either<T, R>> BindAsync<L, R, T>(this Task<Either<L, R>> either, Func<L, Task<T>> onleft)
+        public static async Task<Either<T, R>> MapAsync<L, R, T>(this Task<Either<L, R>> either, Func<L, Task<T>> onleft)
         {
             if (onleft == null)
             {

@@ -51,7 +51,7 @@ namespace Jal.Monads
             return either;
         }
 
-        public static Either<L, T> Bind<L, R, T>(this Either<L, R> either, Func<R, T> onright)
+        public static Either<L, T> Map<L, R, T>(this Either<L, R> either, Func<R, T> onright)
         {
             if (onright == null)
             {
@@ -98,7 +98,7 @@ namespace Jal.Monads
             return either;
         }
 
-        public static Either<T, R> Bind<L, R, T>(this Either<L, R> either, Func<L, T> onleft)
+        public static Either<T, R> Map<L, R, T>(this Either<L, R> either, Func<L, T> onleft)
         {
             if (onleft == null)
             {

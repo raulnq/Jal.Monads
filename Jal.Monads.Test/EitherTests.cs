@@ -48,7 +48,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void Bind_WithRightState_ShouldTrue()
+        public void Map_WithRightState_ShouldTrue()
         {
             var flag = false;
 
@@ -56,7 +56,7 @@ namespace Jal.Monads.Test
 
             var date = DateTime.Now;
 
-            var result = sut.Bind((int right) => { flag = true; return date; });
+            var result = sut.Map((int right) => { flag = true; return date; });
 
             flag.ShouldBeTrue();
 
@@ -70,7 +70,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void BindMonad_WithRightState_ShouldTrue()
+        public void Bind_WithRightState_ShouldTrue()
         {
             var flag = false;
 
@@ -92,7 +92,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void Bind_WithLeftState_ShouldFalse()
+        public void Map_WithLeftState_ShouldFalse()
         {
             var flag = false;
 
@@ -100,7 +100,7 @@ namespace Jal.Monads.Test
 
             var date = DateTime.Now;
 
-            var result = sut.Bind((int right) => { flag = true; return date; });
+            var result = sut.Map((int right) => { flag = true; return date; });
 
             flag.ShouldBeFalse();
 
@@ -114,7 +114,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void BindMonad_WithLeftState_ShouldFalse()
+        public void Bind_WithLeftState_ShouldFalse()
         {
             var flag = false;
 
@@ -176,7 +176,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void Bind_WithRightState_ShouldFalse()
+        public void Map_WithRightState_ShouldFalse()
         {
             var flag = false;
 
@@ -184,7 +184,7 @@ namespace Jal.Monads.Test
 
             var date = DateTime.Now;
 
-            var result = sut.Bind((string left) => { flag = true; return date; });
+            var result = sut.Map((string left) => { flag = true; return date; });
 
             flag.ShouldBeFalse();
 
@@ -198,7 +198,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void Bind_WithLeftState_ShouldTrue()
+        public void Map_WithLeftState_ShouldTrue()
         {
             var flag = false;
 
@@ -206,7 +206,7 @@ namespace Jal.Monads.Test
 
             var date = DateTime.Now;
 
-            var result = sut.Bind((string left) => { flag = true; return date; });
+            var result = sut.Map((string left) => { flag = true; return date; });
 
             flag.ShouldBeTrue();
 
@@ -268,7 +268,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void Return_WithLeftState_ShouldTrue()
+        public void Match_WithLeftState_ShouldTrue()
         {
             var rflag = false;
 
@@ -286,7 +286,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void Return_WithRightState_ShouldTrue()
+        public void Match_WithRightState_ShouldTrue()
         {
             var rflag = false;
 
@@ -305,7 +305,7 @@ namespace Jal.Monads.Test
 
 
         [TestMethod]
-        public void MatchBoth_WithRightState_ShouldTrue()
+        public void MonitorBoth_WithRightState_ShouldTrue()
         {
             var flag = false;
 
@@ -325,7 +325,7 @@ namespace Jal.Monads.Test
         }
 
         [TestMethod]
-        public void MatchBoth_WithLefttState_ShouldTrue()
+        public void Monitor_WithLefttState_ShouldTrue()
         {
             var flag = false;
 
