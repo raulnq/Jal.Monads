@@ -1,40 +1,43 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using Jal.Monads.Extensions;
 
 namespace Jal.Monads.Test
 {
+    [TestClass]
     public class OnFailureTests : AbstractTests
     {
 
-        [Test]
+        [TestMethod]
         public void OnFailure_WithInputAndAction_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success("");
+            var sut = Result<string, Error>.Success("");
 
-            var result = sut.OnFailure(errors => { executed = true; });
+            var result = sut.OnFailure<Error>(errors => { executed = true; });
 
             SuccessEval(result, !executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnFailure_WithInputAndAction_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure<string>("");
+            var sut = Result<string, Error>.Failure(new Error());
 
-            var result = sut.OnFailure(errors => { executed = true; });
+            var result = sut.OnFailure<Error>(errors => { executed = true; });
 
             FailureEval(result, !executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnFailure_WithAction_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success();
+            var sut = Result<Error>.Success();
 
             var result = sut.OnFailure(errors => { executed = true; });
 
@@ -42,145 +45,145 @@ namespace Jal.Monads.Test
 
         }
 
-        [Test]
+        [TestMethod]
         public void OnFailure_WithAction_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure("");
+            var sut = Result<Error>.Failure(new Error());
 
             var result = sut.OnFailure(errors => { executed = true; });
 
             FailureEval(result, !executed);
         }
 
-        [Test]
-        public void OnFailure_WithFunc_ShouldBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnFailure_WithFunc_ShouldBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Result.Success();
+        //    var sut = Result.Success();
 
-            var result = sut.OnFailure(errors =>
-            {
-                executed = true;
-                return Result.Success();
-            });
+        //    var result = sut.OnFailure(errors =>
+        //    {
+        //        executed = true;
+        //        return Result.Success();
+        //    });
 
-            SuccessEval(result, !executed);
-        }
+        //    SuccessEval(result, !executed);
+        //}
 
-        [Test]
-        public void OnFailure_WithFunc_ShouldNotBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnFailure_WithFunc_ShouldNotBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Result.Failure("");
+        //    var sut = Result.Failure("");
 
-            var result = sut.OnFailure(errors =>
-            {
-                executed = true;
-                return Result.Success();
-            });
+        //    var result = sut.OnFailure(errors =>
+        //    {
+        //        executed = true;
+        //        return Result.Success();
+        //    });
 
-            SuccessEval(result, executed);
-        }
+        //    SuccessEval(result, executed);
+        //}
 
-        [Test]
-        public void OnFailure_WithInputAndFunc_ShouldBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnFailure_WithInputAndFunc_ShouldBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Result.Success("");
+        //    var sut = Result.Success("");
 
-            var result = sut.OnFailure(errors =>
-            {
-                executed = true;
-                return Result.Success();
-            });
+        //    var result = sut.OnFailure(errors =>
+        //    {
+        //        executed = true;
+        //        return Result.Success();
+        //    });
 
-            SuccessEval(result, !executed);
-        }
+        //    SuccessEval(result, !executed);
+        //}
 
-        [Test]
-        public void OnFailure_WithInputAndFunc_ShouldNotBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnFailure_WithInputAndFunc_ShouldNotBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Result.Failure<string>("");
+        //    var sut = Result.Failure<string>("");
 
-            var result = sut.OnFailure(errors =>
-            {
-                executed = true;
-                return Result.Success();
-            });
+        //    var result = sut.OnFailure(errors =>
+        //    {
+        //        executed = true;
+        //        return Result.Success();
+        //    });
 
-            SuccessEval(result, executed);
-        }
+        //    SuccessEval(result, executed);
+        //}
 
 
-        [Test]
-        public void OnFailure_WithInputAndFuncResultInput_ShouldBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnFailure_WithInputAndFuncResultInput_ShouldBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Result.Success("");
+        //    var sut = Result.Success("");
 
-            var result = sut.OnFailure(x =>
-            {
-                executed = true;
-                return Result.Success("");
-            });
+        //    var result = sut.OnFailure(x =>
+        //    {
+        //        executed = true;
+        //        return Result.Success("");
+        //    });
 
-            SuccessEval(result, !executed);
-        }
+        //    SuccessEval(result, !executed);
+        //}
 
-        [Test]
-        public void OnFailure_WithInputAndFuncResultInput_ShouldNotBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnFailure_WithInputAndFuncResultInput_ShouldNotBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Result.Failure<string>("");
+        //    var sut = Result.Failure<string>("");
 
-            var result = sut.OnFailure(x =>
-            {
-                executed = true;
-                return Result.Success("");
-            });
+        //    var result = sut.OnFailure(x =>
+        //    {
+        //        executed = true;
+        //        return Result.Success("");
+        //    });
 
-            SuccessEval(result, executed);
-        }
+        //    SuccessEval(result, executed);
+        //}
 
-        [Test]
-        public void OnFailure_WithInputAndFuncOutput_ShouldBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnFailure_WithInputAndFuncOutput_ShouldBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Result.Success("");
+        //    var sut = Result.Success("");
 
-            var result = sut.OnFailure(x =>
-            {
-                executed = true;
-                return "";
-            });
+        //    var result = sut.OnFailure(x =>
+        //    {
+        //        executed = true;
+        //        return "";
+        //    });
 
-            SuccessEval(result, !executed);
-        }
+        //    SuccessEval(result, !executed);
+        //}
 
-        [Test]
-        public void OnFailure_WithInputAndFuncOutput_ShouldNotBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnFailure_WithInputAndFuncOutput_ShouldNotBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Result.Failure<string>("");
+        //    var sut = Result.Failure<string>("");
 
-            var result = sut.OnFailure(x =>
-            {
-                executed = true;
-                return "";
-            });
+        //    var result = sut.OnFailure(x =>
+        //    {
+        //        executed = true;
+        //        return "";
+        //    });
 
-            SuccessEval(result, executed);
-        }
+        //    SuccessEval(result, executed);
+        //}
     }
 }

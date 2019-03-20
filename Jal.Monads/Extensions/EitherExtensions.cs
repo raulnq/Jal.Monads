@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Jal.Monads
+namespace Jal.Monads.Extensions
 {
     public static class EitherExtensions
     {
         public static Either<L, R> ToRight<L, R>(this R right)
         {
-            return Either.Right<L, R>(right);
+            return Either<L, R>.Return(right);
         }
 
         public static Either<L, R> ToLeft<L, R>(this L left)
         {
-            return Either.Left<L, R>(left);
+            return Either<L, R>.Return(left);
         }
 
         public static T Match<L, R, T>(this Either<L, R> either, Func<L, T> onleft, Func<R, T> onright)
@@ -62,10 +62,10 @@ namespace Jal.Monads
             {
                 var t = onright(either.Right);
 
-                return new Either<L, T>(t);
+                return Either<L, T>.Return(t);
             }
 
-            return new Either<L, T>(either.Left);
+            return Either<L, T>.Return(either.Left);
         }
 
         public static Either<L, T> Bind<L, R, T>(this Either<L, R> either, Func<R, Either<L, T>> onright)
@@ -80,7 +80,7 @@ namespace Jal.Monads
                 return onright(either.Right);
             }
 
-            return new Either<L, T>(either.Left);
+            return Either<L, T>.Return(either.Left);
         }
 
         public static Either<L, R> Monitor<L, R>(this Either<L, R> either, Action<L> onleft)
@@ -109,10 +109,10 @@ namespace Jal.Monads
             {
                 var t = onleft(either.Left);
 
-                return new Either<T, R>(t);
+                return Either<T, R>.Return(t);
             }
 
-            return new Either<T, R>(either.Right);
+            return Either<T, R>.Return(either.Right);
         }
 
         public static Either<T, R> Bind<L, R, T>(this Either<L, R> either, Func<L, Either<T, R>> onleft)
@@ -127,7 +127,7 @@ namespace Jal.Monads
                 return onleft(either.Left);
             }
 
-            return new Either<T, R>(either.Right);
+            return Either<T, R>.Return(either.Right);
         }
 
         public static Either<L, R> Monitor<L, R>(this Either<L, R> either, Action<L> onleft, Action<R> onright)

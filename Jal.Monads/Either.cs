@@ -1,18 +1,5 @@
 ﻿namespace Jal.Monads
 {
-    public class Either
-    {
-        public static Either<L, R> Left<L, R>(L left)
-        {
-            return new Either<L, R>(left);
-        }
-
-        public static Either<L, R> Right<L, R>(R right)
-        {
-            return new Either<L, R>(right);
-        }
-    }
-
     public class Either<L, R>
     {
         public R Right { get; }
@@ -23,18 +10,49 @@
 
         public bool IsLeft => !IsRight;
 
-        public Either(L left)
+        private Either(L left)
         {
             IsRight = false;
             Left = left;
             Right = default(R);
         }
 
-        public Either(R right)
+        private Either(R right)
         {
             IsRight = true;
             Left = default(L);
             Right = right;
+        }
+
+
+        public static implicit operator Either<L, R>(R right)
+        {
+            return new Either<L, R>(right);
+        }
+
+        public static implicit operator Either<L, R>(L left)
+        {
+            return new Either<L, R>(left);
+        }
+
+        public static explicit operator L(Either<L, R> either)
+        {
+            return either.Left;
+        }
+
+        public static explicit operator R(Either<L, R> either)
+        {
+            return either.Right;
+        }
+
+        public static Either<L, R> Return(L left)
+        {
+            return new Either<L, R>(left);
+        }
+
+        public static Either<L, R> Return(R right)
+        {
+            return new Either<L, R>(right);
         }
     }
 }

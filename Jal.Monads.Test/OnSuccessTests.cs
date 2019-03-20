@@ -1,17 +1,20 @@
 ﻿using NUnit.Framework;
 using System.Threading.Tasks;
+using Jal.Monads.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jal.Monads.Test
 {
+    [TestClass]
     public class OnSuccessTests : AbstractTests
     {
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithInputAndAction_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success("");
+            var sut = "".ToSuccess<string, Error>();
 
             var result = sut.OnSuccess(x => { executed = true; });
 
@@ -19,24 +22,24 @@ namespace Jal.Monads.Test
         }
 
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithInputAndAction_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure<string>("");
+            var sut = new Error().ToFailure<string, Error>();
 
             var result = sut.OnSuccess(x => { executed=true; });
 
             FailureEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithAction_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success();
+            var sut = Result<Error>.Success();
 
             var result = sut.OnSuccess(() => { executed = true; });
 
@@ -44,157 +47,157 @@ namespace Jal.Monads.Test
 
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithAction_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure("");
+            var sut = Result<Error>.Failure(new Error());
 
             var result = sut.OnSuccess(() => { executed = true; });
 
             FailureEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithFunc_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success();
+            var sut = Result<Error>.Success();
 
             var result = sut.OnSuccess(() =>
             {
                 executed = true;
-                return Result.Success();
+                return Result<Error>.Success();
             });
 
             SuccessEval(result, executed);
         }
 
-        [Test]
-        public void OnAsyncSuccess_WithFunc_ShouldBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnAsyncSuccess_WithFunc_ShouldBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = Task.FromResult(Result.Success());
+        //    var sut = Task.FromResult(Result.Success());
 
-            var result = sut.OnSuccessAsync(async () =>
-            {
-                executed = true;
-                return await Task.FromResult(Result.Success());
-            });
+        //    var result = sut.OnSuccessAsync(async () =>
+        //    {
+        //        executed = true;
+        //        return await Task.FromResult(Result.Success());
+        //    });
 
-            SuccessAsyncEval(result, executed);
-        }
+        //    SuccessAsyncEval(result, executed);
+        //}
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithFunc_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure("");
+            var sut = Result<string, Error>.Failure(new Error());
 
             var result = sut.OnSuccess(() =>
             {
                 executed = true;
-                return Result.Success();
+                return Result<int,Error>.Success(5);
             });
 
             FailureEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithInputAndFunc_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success("");
+            var sut = Result<string, Error>.Success("");
 
             var result = sut.OnSuccess(x =>
             {
                 executed = true;
-                return Result.Success();
+                return Result<int, Error>.Success(5);
             });
 
             SuccessEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithInputAndFunc_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure<string>("");
+            var sut = Result<string, Error>.Failure(new Error());
 
             var result = sut.OnSuccess(x =>
             {
                 executed = true;
-                return Result.Success();
+                return Result<Error>.Success();
             });
 
             FailureEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithFuncResultOutput_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success();
+            var sut = Result<Error>.Success();
 
             var result = sut.OnSuccess(() =>
             {
                 executed = true;
-                return Result.Success<int?>(1);
+                return Result<int, Error>.Success(5);
             });
 
             SuccessEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithFuncResultOutput_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure("");
+            var sut = Result<Error>.Failure(new Error());
 
             var result = sut.OnSuccess(() =>
             {
                 executed = true;
-                return Result.Success<int?>(1);
+                return Result<int, Error>.Success(5);
             });
 
             FailureEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithInputAndFuncResultOutput_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success("");
+            var sut = Result<string, Error>.Success("");
 
             var result = sut.OnSuccess(x =>
             {
                 executed = true;
-                return Result.Success<int?>(1);
+                return Result<int, Error>.Success(5);
             });
 
             SuccessEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnSuccess_WithInputAndFuncResultOutput_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure<string>("");
+            var sut = Result<string, Error>.Failure(new Error());
 
             var result = sut.OnSuccess(x =>
             {
                 executed = true;
-                return Result.Success<int?>(1);
+                return Result<int, Error>.Success(5);
             });
 
             FailureEval(result, executed);

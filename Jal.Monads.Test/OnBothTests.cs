@@ -1,234 +1,68 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using Jal.Monads.Extensions;
 
 namespace Jal.Monads.Test
 {
+    [TestClass]
     public class OnBothTests : AbstractTests
     {
 
-        [Test]
+        [TestMethod]
         public void OnBoth_WithInputAndAction_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success("");
+            var sut = Result<string, Error>.Success("");
 
             var result = sut.OnBoth(() => { executed = true; });
 
             SuccessEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnBoth_WithInputAndAction_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure<string>("");
+            var sut = Result<string, Error>.Failure(new Error());
 
             var result = sut.OnBoth(() => { executed = true; });
 
             FailureEval(result, !executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnBoth_WithAction_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success();
+            var sut = Result<Error>.Success();
 
-            var result = sut.OnBoth(() => { executed = true; });
+            var result = sut.OnSuccess(() => { executed = true; });
 
             SuccessEval(result, executed);
 
         }
 
-        [Test]
+        [TestMethod]
         public void OnBoth_WithAction_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure("");
+            var sut = Result<Error>.Failure(new Error());
 
-            var result = sut.OnBoth(() => { executed = true; });
+            var result = sut.OnSuccess(() => { executed = true; });
 
-            FailureEval(result, !executed);
+            FailureEval(result, executed);
         }
 
-        [Test]
-        public void OnBoth_WithFunc_ShouldBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Success();
-
-            var result = sut.OnBoth(() =>
-                {
-                    executed = true;
-                    return Result.Success();
-                }
-                ,errors =>
-                {
-                    executed = false;
-                    return Result.Success();
-                });
-
-            SuccessEval(result, executed);
-        }
-
-        [Test]
-        public void OnBoth_WithFunc_ShouldNotBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Failure("");
-
-            var result = sut.OnBoth(() =>
-                {
-                    executed = false;
-                    return Result.Success();
-                }
-                , errors =>
-                {
-                    executed = true;
-                    return Result.Success();
-                });
-
-            SuccessEval(result, executed);
-        }
-
-        [Test]
-        public void OnBoth_WithInputAndFunc_ShouldBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Success("");
-
-            var result = sut.OnBoth(x =>
-                {
-                    executed = true;
-                    return Result.Success();
-                }
-                , errors =>
-                {
-                    executed = false;
-                    return Result.Success();
-                });
-
-            SuccessEval(result, executed);
-        }
-
-        [Test]
-        public void OnBoth_WithInputAndFunc_ShouldNotBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Failure<string>("");
-
-            var result = sut.OnBoth(x =>
-                {
-                    executed = false;
-                    return Result.Success();
-                }
-                , errors =>
-                {
-                    executed = true;
-                    return Result.Success();
-                });
-
-            SuccessEval(result, executed);
-        }
-
-
-        [Test]
-        public void OnBoth_WithInputAndFuncResultInput_ShouldBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Success("");
-
-            var result = sut.OnBoth<string>(x =>
-                {
-                    executed = true;
-                    return Result.Success("");
-                }
-                , errors =>
-                {
-                    executed = false;
-                    return Result.Success("");
-                });
-
-            SuccessEval(result, executed);
-        }
-
-        [Test]
-        public void OnBoth_WithInputAndFuncResultInput_ShouldNotBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Failure<string>("");
-
-            var result = sut.OnBoth<string>(x =>
-                {
-                    executed = false;
-                    return Result.Success("");
-                }
-                , errors =>
-                {
-                    executed = true;
-                    return Result.Success("");
-                });
-
-            SuccessEval(result, executed);
-        }
-
-        [Test]
-        public void OnFailure_WithInputAndFuncOutput_ShouldBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Success("");
-
-            var result = sut.OnBoth(x =>
-                {
-                    executed = true;
-                    return Result.Success<int?>(1);
-                }
-                , errors =>
-                {
-                    executed = false;
-                    return Result.Success<int?>(1);
-                });
-
-            SuccessEval(result, executed);
-        }
-
-        [Test]
-        public void OnBoth_WithInputAndFuncOutput_ShouldNotBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result.Failure<string>("");
-
-            var result = sut.OnBoth(x =>
-                {
-                    executed = false;
-                    return Result.Success<int?>(1);
-                }
-                , errors =>
-                {
-                    executed = true;
-                    return Result.Success<int?>(1);
-                });
-
-            SuccessEval(result, executed);
-        }
-
-        [Test]
+        [TestMethod]
         public void OnBoth_With2Action_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success();
+            var sut = Result<Error>.Success();
 
             var result = sut.OnBoth(() =>
                 {
@@ -242,12 +76,12 @@ namespace Jal.Monads.Test
             SuccessEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnBoth_With2Action_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure("");
+            var sut = Result<Error>.Failure(new Error());
 
             var result = sut.OnBoth(() =>
                 {
@@ -261,12 +95,12 @@ namespace Jal.Monads.Test
             FailureEval(result, !executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnBoth_WithInputAnd2Action_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success("");
+            var sut = Result<string, Error>.Success("");
 
             var result = sut.OnBoth(() =>
                 {
@@ -280,12 +114,12 @@ namespace Jal.Monads.Test
             SuccessEval(result, executed);
         }
 
-        [Test]
+        [TestMethod]
         public void OnBoth_WithInputAnd2Action_ShouldNotBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure<string>("");
+            var sut = Result<string, Error>.Failure(new Error());
 
             var result = sut.OnBoth(() =>
                 {

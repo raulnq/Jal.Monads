@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jal.Monads.Extensions;
 
 namespace Jal.Monads.Test
 {
+
     public interface IPersonRepository
     {
         Person Find(int id);
 
-        Result<Person> FindWithResult(int id);
+        Result<Person, Error> FindWithResult(int id);
     }
 
     public class Person
@@ -27,7 +29,7 @@ namespace Jal.Monads.Test
     {
         void Notify(Transaction transaction, Person person);
 
-        Result NotifyWithResult(Transaction transaction, Person person);
+        Result<Error> NotifyWithResult(Transaction transaction, Person person);
     }
 
     public interface IBankAccount
@@ -36,9 +38,9 @@ namespace Jal.Monads.Test
 
         AccountSummary SearchAccountSummary(Person person);
 
-        Result<Transaction> ChargeWithResult(Person person, decimal amount);
+        Result<Transaction, Error> ChargeWithResult(Person person, decimal amount);
 
-        Result<AccountSummary> SearchAccountSummaryWithResult(Person person);
+        Result<AccountSummary, Error> SearchAccountSummaryWithResult(Person person);
     }
 
     public class AccountSummary
@@ -84,7 +86,7 @@ namespace Jal.Monads.Test
 
         }
 
-        public Result ChargeMoneyWithResults(int id, decimal amount)
+        public Result<Error> ChargeMoneyWithResults(int id, decimal amount)
         {
 
             IPersonRepository repository = null;
@@ -93,24 +95,40 @@ namespace Jal.Monads.Test
 
             INotifier notifier = null;
 
+            //return repository.FindWithResult(id)
+            //    .OnSuccess(person => bankaccount.SearchAccountSummaryWithResult(person)
+            //        .OnSuccess(accountsummary =>
+            //        {
+            //            if (accountsummary.Total > amount)
+            //            {
+            //                return bankaccount.ChargeWithResult(person, amount)
+            //                    .OnSuccess(transaction => notifier.NotifyWithResult(transaction, person));
+
+            //            }
+            //            else
+            //            {
+            //                return Result.Failure(new string[] {});
+            //            }
+            //        }));
+
             return repository.FindWithResult(id)
-                .OnSuccess(person => bankaccount.SearchAccountSummaryWithResult(person)
-                    .OnSuccess(accountsummary =>
+                .Bind(person => bankaccount.SearchAccountSummaryWithResult(person)
+                    .Bind(accountsummary =>
                     {
                         if (accountsummary.Total > amount)
                         {
                             return bankaccount.ChargeWithResult(person, amount)
-                                .OnSuccess(transaction => notifier.NotifyWithResult(transaction, person));
+                                .Bind(transaction => notifier.NotifyWithResult(transaction, person));
 
                         }
                         else
                         {
-                            return Result.Failure(new string[] {});
+                            return Result<Error>.Failure(new Error());
                         }
                     }));
         }
 
-        public Result ChargeMoneyWithResultsAndRefactoring(int id, decimal amount)
+        public Result<Error> ChargeMoneyWithResultsAndRefactoring(int id, decimal amount)
         {
 
             IPersonRepository repository = null;
@@ -120,21 +138,22 @@ namespace Jal.Monads.Test
             INotifier notifier = null;
 
             return repository.FindWithResult(id)
-                .OnSuccess(person => bankaccount.SearchAccountSummaryWithResult(person)
-                    .OnSuccess(accountsummary => IsThereEnoughMoney(accountsummary, amount))
-                    .OnSuccess(() => bankaccount.ChargeWithResult(person, amount))
-                    .OnSuccess(transaction => notifier.NotifyWithResult(transaction, person)));
+                .Bind(person => bankaccount.SearchAccountSummaryWithResult(person)
+                    .Bind(accountsummary => IsThereEnoughMoney(accountsummary, amount))
+                    .Bind(() => bankaccount.ChargeWithResult(person, amount))
+                    .Bind(transaction => notifier.NotifyWithResult(transaction, person))
+                    );
         }
 
-        public Result IsThereEnoughMoney(AccountSummary accountsummary, decimal amount)
+        public Result<Error> IsThereEnoughMoney(AccountSummary accountsummary, decimal amount)
         {
             if (accountsummary.Total > amount)
             {
-                return Result.Success();
+                return Result<Error>.Success();
             }
             else
             {
-                return Result.Failure(new string[] { "Not enough money" });
+                return Result<Error>.Failure(new Error());
             }
         }
 

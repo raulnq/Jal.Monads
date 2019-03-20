@@ -5,7 +5,7 @@ namespace Jal.Monads.Test
 {
     public abstract class AbstractTests
     {
-        public void SuccessEval<TInput>(Result<TInput> result, bool executed)
+        public void SuccessEval<TInput>(Result<TInput, Error> result, bool executed)
         {
             executed.ShouldBeTrue();
 
@@ -14,7 +14,7 @@ namespace Jal.Monads.Test
             result.Content.ShouldNotBeNull();
         }
 
-        public void SuccessAsyncEval<TInput>(Task<Result<TInput>> result, bool executed)
+        public void SuccessAsyncEval<TInput>(Task<Result<TInput, Error>> result, bool executed)
         {
             executed.ShouldBeTrue();
 
@@ -25,14 +25,14 @@ namespace Jal.Monads.Test
             r.Content.ShouldNotBeNull();
         }
 
-        public void SuccessEval(Result result, bool executed)
+        public void SuccessEval(Result<Error> result, bool executed)
         {
             executed.ShouldBeTrue();
 
             result.IsSuccess.ShouldBeTrue();
         }
 
-        public void SuccessAsyncEval(Task<Result> result, bool executed)
+        public void SuccessAsyncEval(Task<Result<Error>> result, bool executed)
         {
             executed.ShouldBeTrue();
 
@@ -41,24 +41,20 @@ namespace Jal.Monads.Test
             r.IsSuccess.ShouldBeTrue();
         }
 
-        public void FailureEval<TInput>(Result<TInput> result, bool executed)
+        public void FailureEval<TInput>(Result<TInput, Error> result, bool executed)
         {
             result.IsSuccess.ShouldBeFalse();
 
             executed.ShouldBeFalse();
 
-            result.Content.ShouldBeNull();
-
-            result.Errors.ShouldHaveSingleItem();
+            result.Content.ShouldBe(default(TInput));
         }
 
-        public void FailureEval(Result result, bool executed)
+        public void FailureEval(Result<Error> result, bool executed)
         {
             result.IsSuccess.ShouldBeFalse();
 
             executed.ShouldBeFalse();
-
-            result.Errors.ShouldHaveSingleItem();
         }
     }
 }

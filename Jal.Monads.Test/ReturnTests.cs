@@ -1,23 +1,31 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Shouldly;
+using Jal.Monads.Extensions;
 
 namespace Jal.Monads.Test
 {
+    public class Error
+    {
+        public string Description { get; set; }
+    }
+
+    [TestClass]
     public class ReturnTests
     {
-        [Test]
+        [TestMethod]
         public void Return_WithOutputAndOnSucess_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success();
+            var sut = Result<Error>.Success();
 
             var result = sut.Return(() =>
                 {
                     executed = true;
                     return "";
                 }
-                , (string errors) =>
+                , (Error error) =>
                 {
                     executed = false;
                     return string.Empty;
@@ -28,19 +36,19 @@ namespace Jal.Monads.Test
             result.ShouldBe("");
         }
 
-        [Test]
+        [TestMethod]
         public void Return_WithOutputAndOnFailure_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure("");
+            var sut = Result<Error>.Failure(new Error());
 
             var result = sut.Return(() =>
                 {
                     executed = false;
                     return string.Empty;
                 }
-                , (string errors) =>
+                , (Error error) =>
                 {
                     executed = true;
                     return "";
@@ -52,19 +60,19 @@ namespace Jal.Monads.Test
 
         }
 
-        [Test]
+        [TestMethod]
         public void Return_WithOutputAndOnSucess2_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success();
+            var sut = Result<Error>.Success();
 
             var result = sut.Return(() =>
                 {
                     executed = true;
                     return "";
                 }
-                , (string[] errors) =>
+                , (Error error) =>
                 {
                     executed = false;
                     return string.Empty;
@@ -75,19 +83,19 @@ namespace Jal.Monads.Test
             result.ShouldBe("");
         }
 
-        [Test]
+        [TestMethod]
         public void Return_WithOutputAndOnFailure2_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure("");
+            var sut = Result<Error>.Failure(new Error());
 
             var result = sut.Return(() =>
                 {
                     executed = false;
                     return string.Empty;
                 }
-                , (string[] errors) =>
+                , (Error error) =>
                 {
                     executed = true;
                     return "";
@@ -99,19 +107,19 @@ namespace Jal.Monads.Test
 
         }
 
-        [Test]
+        [TestMethod]
         public void Return_WithInputOutputAndOnSucess_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success(1);
+            var sut = Result<string, Error>.Success("");
 
             var result = sut.Return(x =>
             {
                 executed = true;
                 return "";
             }
-            , (string errors) =>
+            , (Error error) =>
             {
                 executed = false;
                 return string.Empty;
@@ -122,19 +130,19 @@ namespace Jal.Monads.Test
             result.ShouldBe("");
         }
 
-        [Test]
+        [TestMethod]
         public void Return_WithInputOutputAndOnFailure_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure<int>("");
+            var sut = Result<string, Error>.Failure(new Error());
 
             var result = sut.Return(x =>
             {
                 executed = false;
                 return string.Empty;
             }
-                , (string errors) =>
+                , (Error error) =>
                 {
                     executed = true;
                     return "";
@@ -146,19 +154,19 @@ namespace Jal.Monads.Test
 
         }
 
-        [Test]
+        [TestMethod]
         public void Return_WithInputOutputAndOnSucess2_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Success(1);
+            var sut = Result<int, Error>.Success(1);
 
             var result = sut.Return(x =>
             {
                 executed = true;
                 return "";
             }
-                , (string[] errors) =>
+                , (Error error) =>
                 {
                     executed = false;
                     return string.Empty;
@@ -169,19 +177,19 @@ namespace Jal.Monads.Test
             result.ShouldBe("");
         }
 
-        [Test]
+        [TestMethod]
         public void Return_WithInputOutputAndOnFailure2_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result.Failure<int>("");
+            var sut = Result<int, Error>.Failure(new Error());
 
             var result = sut.Return(x =>
             {
                 executed = false;
                 return string.Empty;
             }
-                , (string[] errors) =>
+                , (Error error) =>
                 {
                     executed = true;
                     return "";
