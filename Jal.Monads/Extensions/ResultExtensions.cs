@@ -19,7 +19,7 @@ namespace Jal.Monads.Extensions
         {
             return Result<E>.Return(error);
         }
-
+        /************************************/
         public static O Match<T, E, O>(this Result<T, E> result, Func<T, O> onsuccess, Func<E, O> onfailure)
         {
             if (onsuccess == null)
@@ -41,6 +41,103 @@ namespace Jal.Monads.Extensions
             }
         }
 
+        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action<T> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                onsuccess(result.Content);
+            }
+
+            return result;
+        }
+
+        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action<E> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (!result.IsSuccess)
+            {
+                onfailure(result.Error);
+            }
+
+            return result;
+        }
+
+        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action onboth)
+        {
+            if (onboth == null)
+            {
+                throw new ArgumentNullException(nameof(onboth));
+            }
+
+            onboth();
+
+            return result;
+        }
+
+        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action onsuccess, Action<E> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsSuccess)
+            {
+                onsuccess();
+            }
+            else
+            {
+                onfailure(result.Error);
+            }
+
+            return result;
+        }
+
+        public static Result<O, E> Bind<T, E, O>(this Result<T, E> result, Func<T, Result<O, E>> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess(result.Content);
+            }
+
+            return Result<O, E>.Return(result.Error);
+        }
+
+        public static Result<E> Bind<T, E>(this Result<T, E> result, Func<T, Result<E>> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess(result.Content);
+            }
+
+            return Result<E>.Return(result.Error);
+        }
+
+        /************************************/
         public static O Match<E, O>(this Result<E> result, Func<O> onsuccess, Func<E, O> onfailure)
         {
             if (onsuccess == null)
@@ -62,44 +159,99 @@ namespace Jal.Monads.Extensions
             }
         }
 
+        public static Result<E> Monitor<E>(this Result<E> result, Action onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                onsuccess();
+            }
+
+            return result;
+        }
+
+        public static Result<E> Monitor<E>(this Result<E> result, Action<E> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (!result.IsSuccess)
+            {
+                onfailure(result.Error);
+            }
+
+            return result;
+        }
+
+        public static Result<E> Monitor<E>(this Result<E> result, Action onsuccess, Action<E> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            if (result.IsSuccess)
+            {
+                onsuccess();
+            }
+            else
+            {
+                onfailure(result.Error);
+            }
+
+            return result;
+        }
+
+        public static Result<E> Bind<E>(this Result<E> result, Func<Result<E>> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess();
+            }
+
+            return Result<E>.Return(result.Error);
+        }
+
+        public static Result<O, E> Bind<E, O>(this Result<E> result, Func<Result<O, E>> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (result.IsSuccess)
+            {
+                return onsuccess();
+            }
+
+            return Result<O, E>.Return(result.Error);
+        }
+
+        /************************************/
         public static O Return<E, O>(this Result<E> result, Func<O> onsuccess, Func<E, O> onfailure)
         {
             return Match(result, onsuccess, onfailure);
         }
 
-        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action<T> action)
+        public static Result<T, E> OnSuccess<T, E>(this Result<T, E> result, Action<T> onsuccess)
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            if (result.IsSuccess)
-            {
-                action(result.Content);
-            }
-
-            return result;
-        }
-
-        public static Result<T, E> OnSuccess<T, E>(this Result<T, E> result, Action<T> action)
-        {
-            return Monitor(result, action);
-        }
-
-        public static Result<E> Monitor<E>(this Result<E> result, Action action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            if (result.IsSuccess)
-            {
-                action();
-            }
-
-            return result;
+            return Monitor(result, onsuccess);
         }
 
         public static Result<E> OnSuccess<E>(this Result<E> result, Action action)
@@ -107,41 +259,26 @@ namespace Jal.Monads.Extensions
             return Monitor(result, action);
         }
 
-        //Tee
-        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action<E> action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            if (!result.IsSuccess)
-            {
-                action(result.Error);
-            }
-
-            return result;
-        }
 
         public static Result<T, E> OnFailure<T, E>(this Result<T, E> result, Action<E> action)
         {
             return Monitor(result, action);
         }
 
-        public static Result<E> Monitor<E>(this Result<E> result, Action<E> action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+        /************************************/
 
-            if (!result.IsSuccess)
-            {
-                action(result.Error);
-            }
 
-            return result;
-        }
+
+
+
+
+
+
+        //Tee
+
+
+
+
 
         public static Result<E> OnFailure<E>(this Result<E> result, Action<E> action)
         {
@@ -196,20 +333,6 @@ namespace Jal.Monads.Extensions
         //    return result;
         //}
 
-        public static Result<E> Bind<E>(this Result<E> result, Func<Result<E>> onsuccess)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
-            if (result.IsSuccess)
-            {
-                return onsuccess();
-            }
-
-            return Result<E>.Return(result.Error);
-        }
 
         public static Result<E> OnSuccess<E>(this Result<E> result, Func<Result<E>> onsuccess)
         {
@@ -217,77 +340,28 @@ namespace Jal.Monads.Extensions
         }
 
 
-        public static Result<O, E> Bind<E, O>(this Result<E> result, Func<Result<O, E>> onsuccess)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
 
-            if (result.IsSuccess)
-            {
-                return onsuccess();
-            }
-
-            return Result<O, E>.Return(result.Error);
-        }
 
         public static Result<O, E> OnSuccess<E, O>(this Result<E> result, Func<Result<O, E>> onsuccess)
         {
             return Bind(result, onsuccess);
         }
 
-        public static Result<O, E> Bind<T, E, O>(this Result<T, E> result, Func<T, Result<O, E>> onsuccess)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
 
-            if (result.IsSuccess)
-            {
-                return onsuccess(result.Content);
-            }
-
-            return Result<O, E>.Return(result.Error);
-        }
 
         public static Result<O, E> OnSuccess<T, E, O>(this Result<T, E> result, Func<T, Result<O, E>> onsuccess)
         {
             return Bind(result, onsuccess);
         }
 
-        public static Result<E> Bind<T, E>(this Result<T, E> result, Func<T, Result<E>> onsuccess)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
 
-            if (result.IsSuccess)
-            {
-                return onsuccess(result.Content);
-            }
-
-            return Result<E>.Return(result.Error);
-        }
 
         public static Result<E> OnSuccess<T, E>(this Result<T, E> result, Func<T, Result<E>> onsuccess)
         {
             return Bind(result, onsuccess);
         }
 
-        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action onboth)
-        {
-            if (onboth == null)
-            {
-                throw new ArgumentNullException(nameof(onboth));
-            }
 
-            onboth();
-
-            return result;
-        }
 
         public static Result<T, E> OnBoth<T, E>(this Result<T, E> result, Action onboth)
         {
@@ -341,59 +415,13 @@ namespace Jal.Monads.Extensions
             //    }
             //}
 
-        public static Result<E> Monitor<E>(this Result<E> result, Action onsuccess, Action<E> onfailure)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsSuccess)
-            {
-                onsuccess();
-            }
-            else
-            {
-                onfailure(result.Error);
-            }
-
-            return result;
-        }
 
         public static Result<E> OnBoth<E>(this Result<E> result, Action onsuccess, Action<E> onfailure)
         {
             return Monitor(result, onsuccess, onfailure);
         }
 
-        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action onsuccess, Action<E> onfailure)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsSuccess)
-            {
-                onsuccess();
-            }
-            else
-            {
-                onfailure(result.Error);
-            }
-
-            return result;
-        }
-
+        
         public static Result<T, E> OnBoth<T, E>(this Result<T, E> result, Action onsuccess, Action<E> onfailure)
         {
             return Monitor(result, onsuccess, onfailure);
