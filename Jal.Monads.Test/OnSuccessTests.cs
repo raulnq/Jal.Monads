@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Jal.Monads.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Jal.Monads.Result;
 
 namespace Jal.Monads.Test
 {
@@ -39,7 +40,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Success();
+            var sut = Success<Error>();
 
             var result = sut.OnSuccess(() => { executed = true; });
 
@@ -52,7 +53,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Failure(new Error());
+            var sut = Failure(new Error());
 
             var result = sut.OnSuccess(() => { executed = true; });
 
@@ -64,12 +65,12 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Success();
+            var sut = Success<Error>();
 
             var result = sut.OnSuccess(() =>
             {
                 executed = true;
-                return Result<Error>.Success();
+                return Success<Error>();
             });
 
             SuccessEval(result, executed);
@@ -96,12 +97,12 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Failure(new Error());
+            var sut = Failure<string, Error>(new Error());
 
             var result = sut.OnSuccess(() =>
             {
                 executed = true;
-                return Result<int,Error>.Success(5);
+                return Success<int, Error>(5);
             });
 
             FailureEval(result, executed);
@@ -112,12 +113,12 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Success("");
+            var sut = Success<string, Error>("");
 
             var result = sut.OnSuccess(x =>
             {
                 executed = true;
-                return Result<int, Error>.Success(5);
+                return Success<int, Error>(5);
             });
 
             SuccessEval(result, executed);
@@ -128,12 +129,12 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Failure(new Error());
+            var sut = Failure<string, Error>(new Error());
 
             var result = sut.OnSuccess(x =>
             {
                 executed = true;
-                return Result<Error>.Success();
+                return Success<Error>();
             });
 
             FailureEval(result, executed);
@@ -144,12 +145,12 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Success();
+            var sut = Success<Error>();
 
             var result = sut.OnSuccess(() =>
             {
                 executed = true;
-                return Result<int, Error>.Success(5);
+                return Success<int, Error>(5);
             });
 
             SuccessEval(result, executed);
@@ -160,12 +161,12 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Failure(new Error());
+            var sut = Failure(new Error());
 
             var result = sut.OnSuccess(() =>
             {
                 executed = true;
-                return Result<int, Error>.Success(5);
+                return Success<int, Error>(5);
             });
 
             FailureEval(result, executed);
@@ -176,12 +177,12 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Success("");
+            var sut = Success<string, Error>("");
 
             var result = sut.OnSuccess(x =>
             {
                 executed = true;
-                return Result<int, Error>.Success(5);
+                return Success<int, Error>(5);
             });
 
             SuccessEval(result, executed);
@@ -192,12 +193,12 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Failure(new Error());
+            var sut = Failure<string, Error>(new Error());
 
             var result = sut.OnSuccess(x =>
             {
                 executed = true;
-                return Result<int, Error>.Success(5);
+                return Success<int, Error>(5);
             });
 
             FailureEval(result, executed);

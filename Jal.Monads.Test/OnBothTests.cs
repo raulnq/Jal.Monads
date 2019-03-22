@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Jal.Monads.Extensions;
+using static Jal.Monads.Result;
 
 namespace Jal.Monads.Test
 {
@@ -9,35 +10,11 @@ namespace Jal.Monads.Test
     {
 
         [TestMethod]
-        public void OnBoth_WithInputAndAction_ShouldBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result<string, Error>.Success("");
-
-            var result = sut.OnBoth(() => { executed = true; });
-
-            SuccessEval(result, executed);
-        }
-
-        [TestMethod]
-        public void OnBoth_WithInputAndAction_ShouldNotBeExecuted()
-        {
-            var executed = false;
-
-            var sut = Result<string, Error>.Failure(new Error());
-
-            var result = sut.OnBoth(() => { executed = true; });
-
-            FailureEval(result, !executed);
-        }
-
-        [TestMethod]
         public void OnBoth_WithAction_ShouldBeExecuted()
         {
             var executed = false;
 
-            var sut = Result<Error>.Success();
+            var sut = Success<Error>();
 
             var result = sut.OnSuccess(() => { executed = true; });
 
@@ -50,7 +27,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Failure(new Error());
+            var sut = Failure(new Error());
 
             var result = sut.OnSuccess(() => { executed = true; });
 
@@ -62,7 +39,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Success();
+            var sut = Success<Error>();
 
             var result = sut.OnBoth(() =>
                 {
@@ -81,7 +58,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Failure(new Error());
+            var sut = Failure(new Error());
 
             var result = sut.OnBoth(() =>
                 {
@@ -100,7 +77,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Success("");
+            var sut = Success<string, Error>("");
 
             var result = sut.OnBoth(() =>
                 {
@@ -119,7 +96,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Failure(new Error());
+            var sut = Failure<string, Error>(new Error());
 
             var result = sut.OnBoth(() =>
                 {

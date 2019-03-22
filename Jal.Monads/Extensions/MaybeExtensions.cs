@@ -4,9 +4,9 @@ namespace Jal.Monads.Extensions
 {
     public static class MaybeExtensions
     {
-        public static Maybe<T> ToMaybe<T, E>(this T content)
+        public static Maybe<T> ToMaybe<T, E>(this T value)
         {
-            return Maybe<T>.Return(content);
+            return Maybe<T>.Return(value);
         }
 
         public static Maybe<O> Bind<T,O>(this Maybe<T> maybe, Func<T, Maybe<O>> func)
@@ -59,5 +59,20 @@ namespace Jal.Monads.Extensions
                 return none();
             }
         }
+
+        //public static Result<T, E> ToResult<T, E>(this Maybe<T> maybe, Func<E> none)
+        //{
+        //    if (none == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(none));
+        //    }
+
+        //    if (maybe.HasValue)
+        //    {
+        //        return  maybe.Value.ToSuccess<T, E>();
+        //    }
+
+        //    return none().ToFailure<T, E>();
+        //}
     }
 }

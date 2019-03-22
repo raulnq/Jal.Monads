@@ -2,9 +2,13 @@
 
 Just another library that implement monads
 
+## Maybe
+
+## Either
+
 ## Result
 
-The Result class is like the Either monad but limited to return an array of strings in the left side. I want to explain what we are trying to solve using the following example. Imagine that we need to create a class to do the following:
+The Result monad is like the Either monad but limited to return an array of strings in the left side. I want to explain what we are trying to solve using the following example. Imagine that we need to create a class to do the following:
 * Search a client by id.
 * Search his account summary.
 * Validate that are enough credit to charge some new amount.

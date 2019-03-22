@@ -6,434 +6,451 @@ namespace Jal.Monads.Extensions
     public static class ResultAsyncExtensions
     {
 
-        //public static async Task<TOutput> ReturnAsync<TInput, TOutput>(this Task<Result<TInput>> result, Func<TInput, Task<TOutput>> onsuccess, Func<string, Task<TOutput>> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess(r.Content);
-        //    }
-        //    else
-        //    {
-        //        return await onfailure(string.Join(",", r.Error));
-        //    }
-        //}
-
-        //public static async Task<TOutput> ReturnAsync<TOutput>(this Task<Result> result, Func<Task<TOutput>> onsuccess, Func<string, Task<TOutput>> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess();
-        //    }
-        //    else
-        //    {
-        //        return await onfailure(string.Join(",", r.Errors));
-        //    }
-        //}
-
-        //public static async Task<TOutput> ReturnAsync<TInput, TOutput>(this Task<Result<TInput>> result, Func<TInput, Task<TOutput>> onsuccess, Func<string[], Task<TOutput>> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess(r.Content);
-        //    }
-        //    else
-        //    {
-        //        return await onfailure(r.Error);
-        //    }
-        //}
-
-        //public static async Task<TOutput> ReturnAsync<TOutput>(this Task<Result> result, Func<Task<TOutput>> onsuccess, Func<string[], Task<TOutput>> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess();
-        //    }
-        //    else
-        //    {
-        //        return await onfailure(r.Errors);
-        //    }
-        //}
-
-        //public static async Task<Result<TInput>> OnFailureAsync<TInput>(this Task<Result<TInput>> result, Func<string[], Task> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsFailure)
-        //    {
-        //        await onfailure(r.Error);
-        //    }
-
-        //    return r;
-        //}
-
-        //public static async Task<Result> OnFailureAsync(this Task<Result> result, Func<string[], Task> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsFailure)
-        //    {
-        //        await onfailure(r.Errors);
-        //    }
-
-        //    return r;
-        //}
-
-        
-        //public static async Task<Result> OnFailureAsync(this Task<Result> result, Func<string[], Task<Result>> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsFailure)
-        //    {
-        //        return await onfailure(r.Errors);
-        //    }
-
-        //    return r;
-        //}
-
-        //public static async Task<Result> OnFailureAsync<TInput>(this Task<Result<TInput>> result, Func<string[], Task<Result>> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsFailure)
-        //    {
-        //        return await onfailure(r.Error);
-        //    }
-
-        //    return r;
-        //}
-
-        //public static async Task<Result<TInput>> OnFailureAsync<TInput>(this Task<Result<TInput>> result, Func<string[], Task<Result<TInput>>> onfailure)
-        //{
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsFailure)
-        //    {
-        //        return await onfailure(r.Error);
-        //    }
-
-        //    return r;
-        //}
-
-        //public static async Task<Result<TInput>> OnSuccessAsync<TInput>(this Task<Result<TInput>> result, Func<TInput, Task> onsuccess)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        await onsuccess(r.Content);
-        //    }
-
-        //    return r;
-        //}
-
-        //public static async Task<Result> OnSuccessAsync(this Task<Result> result, Func<Task> onsuccess)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        await onsuccess();
-        //    }
-
-        //    return r;
-        //}
-
-        //public static async Task<Result> OnSuccessAsync(this Task<Result> result, Func<Task<Result>> onsuccess)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess();
-        //    }
-
-        //    return Result.Failure(r.Errors);
-        //}
-
-        //public static async Task<Result> OnSuccessAsync<TInput>(this Task<Result<TInput>> result, Func<TInput, Task<Result>> onsuccess)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess(r.Content);
-        //    }
-
-        //    return Result.Failure(r.Error);
-        //}
-
-        //public static async Task<Result<TOutput>> OnSuccessAsync<TOutput>(this Task<Result> result, Func<Task<Result<TOutput>>> onsuccess)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess();
-        //    }
-
-        //    return new Result<TOutput>(r.Errors);
-        //}
-
-        //public static async Task<Result<TOutput>> OnSuccessAsync<TInput, TOutput>(this Task<Result<TInput>> result, Func<TInput, Task<Result<TOutput>>> onsuccess)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess(r.Content);
-        //    }
-
-        //    return new Result<TOutput>(r.Error);
-        //}
-
-        //public static async Task<Result<TOutput>> OnBothAsync<TInput, TOutput>(this Task<Result<TInput>> result, Func<TInput, Task<Result<TOutput>>> onsuccess, Func<string[], Task<Result<TOutput>>> onfailure)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess(r.Content);
-        //    }
-        //    else
-        //    {
-        //        return await onfailure(r.Error);
-        //    }
-        //}
-
-        //public static async Task<Result<TInput>> OnBothAsync<TInput>(this Task<Result<TInput>> result, Func<Task> onboth)
-        //{
-        //    if (onboth == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onboth));
-        //    }
-
-        //    await onboth();
-
-        //    return await result;
-        //}
-
-        //public static async Task<Result> OnBothAsync<TInput>(this Task<Result<TInput>> result, Func<TInput, Task<Result>> onsuccess, Func<string[], Task<Result>> onfailure)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess(r.Content);
-        //    }
-        //    else
-        //    {
-        //        return await onfailure(r.Error);
-        //    }
-        //}
-
-        //public static async Task<Result> OnBothAsync(this Task<Result> result, Func<Task<Result>> onsuccess, Func<string[], Task<Result>> onfailure)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        return await onsuccess();
-        //    }
-        //    else
-        //    {
-        //        return await onfailure(r.Errors);
-        //    }
-        //}
-
-        //public static async Task<Result> OnBothAsync(this Task<Result> result, Func<Task> onboth)
-        //{
-        //    if (onboth == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onboth));
-        //    }
-
-        //    await onboth();
-
-        //    return await result;
-        //}
-
-        //public static async Task<Result> OnBothAsync(this Task<Result> result, Func<Task> onsuccess, Func<string[], Task> onfailure)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        await onsuccess();
-        //    }
-        //    else
-        //    {
-        //        await onfailure(r.Errors);
-        //    }
-
-        //    return r;
-        //}
-
-        //public static async Task<Result<TInput>> OnBothAsync<TInput>(this Task<Result<TInput>> result, Func<Task> onsuccess, Func<string[], Task> onfailure)
-        //{
-        //    if (onsuccess == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onsuccess));
-        //    }
-
-        //    if (onfailure == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(onfailure));
-        //    }
-
-        //    var r = await result;
-
-        //    if (r.IsSuccess)
-        //    {
-        //        await onsuccess();
-        //    }
-        //    else
-        //    {
-        //        await onfailure(r.Error);
-        //    }
-
-        //    return r;
-        //}
-
+        public static async Task<O> MatchAsync<T, E, O>(this Task<Result<T, E>> result, Func<T, Task<O>> onsuccess, Func<E, Task<O>> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                return await onsuccess(r.Content);
+            }
+            else
+            {
+                return await onfailure(r.Error);
+            }
+        }
+
+        public static async Task<Result<T, E>> MonitorAsync<T, E>(this Task<Result<T, E>> result, Func<T, Task> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                await onsuccess(r.Content);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<T, E>> MonitorAsync<T, E>(this Task<Result<T, E>> result, Action<T> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                onsuccess(r.Content);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<T, E>> MonitorAsync<T, E>(this Task<Result<T, E>> result, Func<E, Task> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (!r.IsSuccess)
+            {
+                await onfailure(r.Error);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<T, E>> MonitorAsync<T, E>(this Task<Result<T, E>> result, Action<E> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (!r.IsSuccess)
+            {
+                onfailure(r.Error);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<T, E>> MonitorAsync<T, E>(this Task<Result<T, E>> result, Func<T, Task> onsuccess, Func<E, Task> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                await onsuccess(r.Content);
+            }
+            else
+            {
+                await onfailure(r.Error);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<T, E>> MonitorAsync<T, E>(this Task<Result<T, E>> result, Action<T> onsuccess, Action<E> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                onsuccess(r.Content);
+            }
+            else
+            {
+                onfailure(r.Error);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<O, E>> BindAsync<T, E, O>(this Task<Result<T, E>> result, Func<T, Task<Result<O, E>>> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                return await onsuccess(r.Content);
+            }
+
+            return Result<O, E>.Return(r.Error);
+        }
+
+        public static async Task<Result<E>> BindAsync<T, E>(this Task<Result<T, E>> result, Func<T, Task<Result<E>>> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                return await onsuccess(r.Content);
+            }
+
+            return Result<E>.Return(r.Error);
+        }
+        /************************************/
+        public static async Task<O> MatchAsync<E, O>(this Task<Result<E>> result, Func<Task<O>> onsuccess, Func<E, Task<O>> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                return await onsuccess();
+            }
+            else
+            {
+                return await onfailure(r.Error);
+            }
+        }
+
+        public static async Task<Result<E>> MonitorAsync<E>(this Task<Result<E>> result, Func<Task> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                await onsuccess();
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<E>> MonitorAsync<E>(this Task<Result<E>> result, Action onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                onsuccess();
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<E>> MonitorAsync<E>(this Task<Result<E>> result, Func<E, Task> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (!r.IsSuccess)
+            {
+                await onfailure(r.Error);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<E>> MonitorAsync<E>(this Task<Result<E>> result, Action<E> onfailure)
+        {
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (!r.IsSuccess)
+            {
+                onfailure(r.Error);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<E>> MonitorAsync<E>(this Task<Result<E>> result, Func<Task> onsuccess, Func<E, Task> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                await onsuccess();
+            }
+            else
+            {
+                await onfailure(r.Error);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<E>> MonitorAsync<E>(this Task<Result<E>> result, Action onsuccess, Action<E> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                onsuccess();
+            }
+            else
+            {
+                onfailure(r.Error);
+            }
+
+            return r;
+        }
+
+        public static async Task<Result<E>> BindAsync<E>(this Task<Result<E>> result, Func<Task<Result<E>>> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                return await onsuccess();
+            }
+
+            return Result<E>.Return(r.Error);
+        }
+
+        public static async Task<Result<O, E>> BindAsync<E, O>(this Task<Result<E>> result, Func<Task<Result<O, E>>> onsuccess)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                return await onsuccess();
+            }
+
+            return Result<O, E>.Return(r.Error);
+        }
+        /************************************/
+
+        public static Task<O> Return<T, E, O>(this Task<Result<T, E>> result, Func<T, Task<O>> onsuccess, Func<E, Task<O>> onfailure)
+        {
+            return MatchAsync(result, onsuccess, onfailure);
+        }
+
+        public static Task<Result<T, E>> OnSuccess<T, E>(this Task<Result<T, E>> result, Func<T, Task> onsuccess)
+        {
+            return MonitorAsync(result, onsuccess);
+        }
+
+        public static Task<Result<T, E>> OnSuccess<T, E>(this Task<Result<T, E>> result, Action<T> onsuccess)
+        {
+            return MonitorAsync(result, onsuccess);
+        }
+
+        public static Task<Result<T, E>> OnFailure<T, E>(this Task<Result<T, E>> result, Func<E, Task> onfailure)
+        {
+            return MonitorAsync(result, onfailure);
+        }
+
+        public static Task<Result<T, E>> OnFailure<T, E>(this Task<Result<T, E>> result, Action<E> onfailure)
+        {
+            return MonitorAsync(result, onfailure);
+        }
+
+        public static Task<Result<T, E>> OnBoth<T, E>(this Task<Result<T, E>> result, Func<T, Task> onsuccess, Func<E, Task> onfailure)
+        {
+            return MonitorAsync(result, onsuccess, onfailure);
+        }
+
+        public static Task<Result<T, E>> OnBoth<T, E>(this Task<Result<T, E>> result, Action<T> onsuccess, Action<E> onfailure)
+        {
+            return MonitorAsync(result, onsuccess, onfailure);
+        }
+
+        public static Task<Result<O, E>> OnSuccess<T, E, O>(this Task<Result<T, E>> result, Func<T, Task<Result<O, E>>> onsuccess)
+        {
+            return BindAsync(result, onsuccess);
+        }
+
+        public static Task<Result<E>> OnSuccess<T, E>(this Task<Result<T, E>> result, Func<T, Task<Result<E>>> onsuccess)
+        {
+            return BindAsync(result, onsuccess);
+        }
+        /************************************/
+
+        public static Task<O> Return<E, O>(this Task<Result<E>> result, Func<Task<O>> onsuccess, Func<E, Task<O>> onfailure)
+        {
+            return MatchAsync(result, onsuccess, onfailure);
+        }
+
+        public static Task<Result<E>> OnSuccess<E>(this Task<Result<E>> result, Func<Task> onsuccess)
+        {
+            return MonitorAsync(result, onsuccess);
+        }
+
+        public static Task<Result<E>> OnSuccess<E>(this Task<Result<E>> result, Action onsuccess)
+        {
+            return MonitorAsync(result, onsuccess);
+        }
+
+        public static Task<Result<E>> OnFailure<E>(this Task<Result<E>> result, Func<E, Task> onfailure)
+        {
+            return MonitorAsync(result, onfailure);
+        }
+
+        public static Task<Result<E>> OnFailure<E>(this Task<Result<E>> result, Action<E> onfailure)
+        {
+            return MonitorAsync(result, onfailure);
+        }
+
+        public static Task<Result<E>> OnBoth<E>(this Task<Result<E>> result, Func<Task> onsuccess, Func<E, Task> onfailure)
+        {
+            return MonitorAsync(result, onsuccess, onfailure);
+        }
+
+        public static Task<Result<E>> OnBoth<E>(this Task<Result<E>> result, Action onsuccess, Action<E> onfailure)
+        {
+            return MonitorAsync(result, onsuccess, onfailure);
+        }
+
+        public static Task<Result<E>> OnSuccess<E>(this Task<Result<E>> result, Func<Task<Result<E>>> onsuccess)
+        {
+            return BindAsync(result, onsuccess);
+        }
+
+        public static Task<Result<O, E>> OnSuccess<E, O>(this Task<Result<E>> result, Func<Task<Result<O, E>>> onsuccess)
+        {
+            return BindAsync(result, onsuccess);
+        }
         //public static async Task<Result> MergeAsync(this Task<Result> first, Task<Result> second)
         //{
         //    var rfirst = await first;

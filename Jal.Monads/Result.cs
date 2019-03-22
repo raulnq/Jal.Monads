@@ -44,15 +44,28 @@
         {
             return new Result<T, E>(error);
         }
+    }
 
-        public static Result<T, E> Success(T content)
+    public static class Result
+    {
+        public static Result<E> Failure<E>(E error)
         {
-            return Return(content);
+            return Result<E>.Return(error);
         }
 
-        public new static Result<T, E> Failure(E error)
+        public static Result<E> Success<E>()
         {
-            return Return(error);
+            return Result<E>.Return();
+        }
+
+        public static Result<T, E> Success<T, E>(T content)
+        {
+            return Result<T, E>.Return(content);
+        }
+
+        public static Result<T, E> Failure<T, E>(E error)
+        {
+            return Result<T,E>.Return(error);
         }
     }
 
@@ -94,16 +107,6 @@
         public static Result<E> Return()
         {
             return new Result<E>();
-        }
-
-        public static Result<E> Failure(E error)
-        {
-            return Return(error);
-        }
-
-        public static Result<E> Success()
-        {
-            return Return();
         }
     }
 }

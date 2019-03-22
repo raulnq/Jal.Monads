@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Shouldly;
 using Jal.Monads.Extensions;
+using static Jal.Monads.Result;
 
 namespace Jal.Monads.Test
 {
@@ -18,7 +19,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Success();
+            var sut = Success<Error>();
 
             var result = sut.Return(() =>
                 {
@@ -41,7 +42,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Failure(new Error());
+            var sut = Failure(new Error());
 
             var result = sut.Return(() =>
                 {
@@ -65,7 +66,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Success();
+            var sut = Success<Error>();
 
             var result = sut.Return(() =>
                 {
@@ -88,7 +89,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Failure(new Error());
+            var sut = Failure(new Error());
 
             var result = sut.Return(() =>
                 {
@@ -112,7 +113,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Success("");
+            var sut = Success<string, Error>("");
 
             var result = sut.Return(x =>
             {
@@ -135,7 +136,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Failure(new Error());
+            var sut = Failure<string, Error>(new Error());
 
             var result = sut.Return(x =>
             {
@@ -159,7 +160,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<int, Error>.Success(1);
+            var sut = Success<int, Error>(1);
 
             var result = sut.Return(x =>
             {
@@ -182,7 +183,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<int, Error>.Failure(new Error());
+            var sut = Failure<int, Error>(new Error());
 
             var result = sut.Return(x =>
             {

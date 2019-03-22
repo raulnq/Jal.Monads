@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Jal.Monads.Extensions;
+using static Jal.Monads.Result;
 
 namespace Jal.Monads.Test
 {
@@ -13,7 +14,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Success("");
+            var sut = Success<string, Error>("");
 
             var result = sut.OnFailure<Error>(errors => { executed = true; });
 
@@ -25,7 +26,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<string, Error>.Failure(new Error());
+            var sut = Failure<string, Error>(new Error());
 
             var result = sut.OnFailure<Error>(errors => { executed = true; });
 
@@ -37,7 +38,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Success();
+            var sut = Success<Error>();
 
             var result = sut.OnFailure(errors => { executed = true; });
 
@@ -50,7 +51,7 @@ namespace Jal.Monads.Test
         {
             var executed = false;
 
-            var sut = Result<Error>.Failure(new Error());
+            var sut = Failure<Error>(new Error());
 
             var result = sut.OnFailure(errors => { executed = true; });
 
