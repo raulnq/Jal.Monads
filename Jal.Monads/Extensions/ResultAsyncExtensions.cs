@@ -163,7 +163,7 @@ namespace Jal.Monads.Extensions
                 return await onsuccess(r.Content);
             }
 
-            return Result<O, E>.Return(r.Error);
+            return Result.Failure<O, E>(r.Error);
         }
 
         public static async Task<Result<E>> BindAsync<T, E>(this Task<Result<T, E>> result, Func<T, Task<Result<E>>> onsuccess)
@@ -180,7 +180,7 @@ namespace Jal.Monads.Extensions
                 return await onsuccess(r.Content);
             }
 
-            return Result<E>.Return(r.Error);
+            return Result.Failure<E>(r.Error);
         }
         /************************************/
         public static async Task<O> MatchAsync<E, O>(this Task<Result<E>> result, Func<Task<O>> onsuccess, Func<E, Task<O>> onfailure)
@@ -340,7 +340,7 @@ namespace Jal.Monads.Extensions
                 return await onsuccess();
             }
 
-            return Result<E>.Return(r.Error);
+            return Result.Failure(r.Error);
         }
 
         public static async Task<Result<O, E>> BindAsync<E, O>(this Task<Result<E>> result, Func<Task<Result<O, E>>> onsuccess)
@@ -357,7 +357,7 @@ namespace Jal.Monads.Extensions
                 return await onsuccess();
             }
 
-            return Result<O, E>.Return(r.Error);
+            return Result.Failure<O, E>(r.Error);
         }
         /************************************/
 

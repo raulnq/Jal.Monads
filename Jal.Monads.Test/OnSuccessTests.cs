@@ -6,6 +6,7 @@ using static Jal.Monads.Result;
 
 namespace Jal.Monads.Test
 {
+
     [TestClass]
     public class OnSuccessTests : AbstractTests
     {

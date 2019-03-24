@@ -9,25 +9,35 @@ namespace Jal.Monads.Extensions
         {
             if(result.IsSuccess)
             {
-                return result.Content.Match(some => Result<T, E>.Return(some), ()=> Result<T, E>.Return(none()));
+                return result.Content.Match(some => Result.Success<T, E>(some), ()=> Result.Failure<T, E>(none()));
             }
 
-            return Result<T,E>.Return(result.Error);
+            return Result.Failure<T, E>(result.Error);
+        }
+
+        public static Result<T, E> UnWrap<T, E>(this Result<Try<T>, E> result, Func<Exception, E> failure)
+        {
+            if (result.IsSuccess)
+            {
+                return result.Content.Match(value => Result.Success<T, E>(value), e => Result.Failure<T, E>(failure(e)));
+            }
+
+            return Result.Failure<T, E>(result.Error);
         }
 
         public static Result<T, E> ToSuccess<T, E>(this T content)
         {
-            return Result<T, E>.Return(content);
+            return Result.Success<T, E>(content);
         }
 
         public static Result<T, E> ToFailure<T, E>(this E error)
         {
-            return Result<T, E>.Return(error);
+            return Result.Failure<T, E>(error);
         }
 
         public static Result<E> ToFailure<E>(this E error)
         {
-            return Result<E>.Return(error);
+            return Result.Failure(error);
         }
         /************************************/
         public static O Match<T, E, O>(this Result<T, E> result, Func<T, O> onsuccess, Func<E, O> onfailure)
@@ -117,7 +127,7 @@ namespace Jal.Monads.Extensions
                 return onsuccess(result.Content);
             }
 
-            return Result<O, E>.Return(result.Error);
+            return Result.Failure<O, E>(result.Error);
         }
 
         public static Result<E> Bind<T, E>(this Result<T, E> result, Func<T, Result<E>> onsuccess)
@@ -132,7 +142,7 @@ namespace Jal.Monads.Extensions
                 return onsuccess(result.Content);
             }
 
-            return Result<E>.Return(result.Error);
+            return Result.Failure(result.Error);
         }
 
         /************************************/
@@ -223,7 +233,7 @@ namespace Jal.Monads.Extensions
                 return onsuccess();
             }
 
-            return Result<E>.Return(result.Error);
+            return Result.Failure(result.Error);
         }
 
         public static Result<O, E> Bind<E, O>(this Result<E> result, Func<Result<O, E>> onsuccess)
@@ -238,7 +248,7 @@ namespace Jal.Monads.Extensions
                 return onsuccess();
             }
 
-            return Result<O, E>.Return(result.Error);
+            return Result.Failure<O, E>(result.Error);
         }
 
         /************************************/

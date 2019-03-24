@@ -1,5 +1,17 @@
 ﻿namespace Jal.Monads
 {
+    public static class Either
+    {
+        public static Either<L, R> Left<L, R>(L left)
+        {
+            return Either<L, R>.Return(left);
+        }
+
+        public static Either<L, R> Right<L, R>(R right)
+        {
+            return Either<L, R>.Return(right);
+        }
+    }
     public class Either<L, R>
     {
         public R Right { get; }

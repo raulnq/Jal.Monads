@@ -25,22 +25,22 @@
             return new Result<T, E>(error);
         }
 
-        public static explicit operator T(Result<T, E> result)
+        public static implicit operator T(Result<T, E> result)
         {
             return result.Content;
         }
 
-        public static explicit operator E(Result<T, E> result)
+        public static implicit operator E(Result<T, E> result)
         {
             return result.Error;
         }
 
-        public static Result<T, E> Return(T content)
+        internal static Result<T, E> Return(T content)
         {
             return new Result<T, E>(content);
         }
 
-        public new static Result<T, E> Return(E error)
+        internal new static Result<T, E> Return(E error)
         {
             return new Result<T, E>(error);
         }
@@ -94,17 +94,17 @@
             return new Result<E>(error);
         }
 
-        public static explicit operator E(Result<E> result)
+        public static implicit operator E(Result<E> result)
         {
             return result.Error;
         }
 
-        public static Result<E> Return(E error)
+        internal static Result<E> Return(E error)
         {
             return new Result<E>(error);
         }
 
-        public static Result<E> Return()
+        internal static Result<E> Return()
         {
             return new Result<E>();
         }
