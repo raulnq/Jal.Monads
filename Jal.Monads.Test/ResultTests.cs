@@ -2,12 +2,44 @@
 using static Jal.Monads.Result;
 using Shouldly;
 using Jal.Monads.Extensions;
+using System;
 
 namespace Jal.Monads.Test
 {
     [TestClass]
     public class ResultTests
     {
+        private Func<int, Result<int, string>> ok = val => Success<int, string>(val);
+
+        private Func<int, Result<int, string>> f = val => Success<int, string>(val + 1);
+
+        private Func<int, Result<int, string>> g = val => Success<int, string>(val + 3);
+
+        [TestMethod]
+        public void leftIdentity()
+        {
+            var val = 2;
+            //unit(a) flatMap f === f(a)
+            Success<int, string>(val).Bind(f).Content.ShouldBe(f(val).Content);
+        }
+
+        [TestMethod]
+        public void rightIdentity()
+        {
+            var result = Success<int, string>(2);
+            //m flatMap unit === m
+            result.Bind(ok).Content.ShouldBe(result.Content);
+        }
+
+        //public void associativity()
+        //{
+        //    Result<Integer> result = ok(2);
+        //    Result<Integer> left = (result.flatMap(f)).flatMap(g);
+        //    Result<Integer> right = result.flatMap(val->f.apply(val).flatMap(g));
+        ////(m flatMap f) flatMap g === m flatMap ( f(x) flatMap g )
+        //    assertThat(left, is (right));
+        //}
+
         [TestMethod]
         public void ToSuccess_WithIntAndNoError_ShouldBeTrue()
         {
