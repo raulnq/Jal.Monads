@@ -155,5 +155,105 @@ namespace Jal.Monads.Test
 
             sutsuccess.ShouldBe(default(int));
         }
+
+        [TestMethod]
+        public void Bind_WithIntAndNoError_ShouldBeTrue()
+        {
+            var init = Success<int, string>(5);
+
+            var sut = init.Bind<int, string, long>(x => x + 1);
+
+            sut.IsSuccess.ShouldBeTrue();
+
+            sut.IsFailure.ShouldBeFalse();
+
+            sut.Content.ShouldBe(6);
+
+            sut.Error.ShouldBe(default(string));
+        }
+
+        [TestMethod]
+        public void Bind_WithIntAndError_ShouldBeFalse()
+        {
+            var init = Failure<int, string>("error");
+
+            var sut = init.Bind<int, string, long>(x => x + 1);
+
+            sut.IsSuccess.ShouldBeFalse();
+
+            sut.IsFailure.ShouldBeTrue();
+
+            sut.Content.ShouldBe(default(long));
+
+            sut.Error.ShouldBe("error");
+        }
+
+        [TestMethod]
+        public void Bind_WithIntAndNoError_ToResultAndShouldBeTrue()
+        {
+            var init = Success<int, string>(5);
+
+            var sut = init.Bind(x => Success<string>());
+
+            sut.IsSuccess.ShouldBeTrue();
+
+            sut.IsFailure.ShouldBeFalse();
+
+            sut.Error.ShouldBe(default(string));
+        }
+
+        [TestMethod]
+        public void Bind_WithIntAndError_ToResultAndShouldBeFalse()
+        {
+            var init = Failure<int, string>("error");
+
+            var sut = init.Bind(x => Success<string>());
+
+            sut.IsSuccess.ShouldBeFalse();
+
+            sut.IsFailure.ShouldBeTrue();
+
+            sut.Error.ShouldBe("error");
+        }
+
+        [TestMethod]
+        public void MonitorOnFailure_WithIntAndError_ShouldBeFalse()
+        {
+            var init = Failure<int, string>("error");
+
+            var executed = false;
+
+            var sut = init.Monitor(onfailure: x => { executed = true; });
+
+            executed.ShouldBeTrue();
+
+            sut.IsSuccess.ShouldBeFalse();
+
+            sut.IsFailure.ShouldBeTrue();
+
+            sut.Content.ShouldBe(default(int));
+
+            sut.Error.ShouldBe("error");
+        }
+
+        [TestMethod]
+        public void MonitorOnSuccess_WithIntAndNoError_ShouldBeTrue()
+        {
+            var init = Success<int, string>(5);
+
+            var executed = false;
+
+            var sut = init.Monitor(onsuccess: x => { executed = true; });
+
+            executed.ShouldBeTrue();
+
+            sut.IsSuccess.ShouldBeTrue();
+
+            sut.IsFailure.ShouldBeFalse();
+
+            sut.Content.ShouldBe(5);
+
+            sut.Error.ShouldBe(default(string));
+        }
     }
 }

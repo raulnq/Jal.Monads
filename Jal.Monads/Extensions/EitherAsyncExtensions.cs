@@ -50,12 +50,10 @@ namespace Jal.Monads.Extensions
 
             if (e.IsRight)
             {
-                var t = onright(e.Right);
-
-                return Either<L, T>.Return(t);
+                return onright(e.Right);
             }
 
-            return Either<L, T>.Return(e.Left);
+            return e.Left;
         }
 
         public static async Task<Either<L, T>> BindAsync<L, R, T>(this Task<Either<L, R>> either, Func<R, Either<L, T>> onright)
@@ -72,7 +70,7 @@ namespace Jal.Monads.Extensions
                 return onright(e.Right);
             }
 
-            return Either<L, T>.Return(e.Left);
+            return e.Left;
         }
 
         public static async Task<Either<L, T>> BindAsync<L, R, T>(this Task<Either<L, R>> either, Func<R, Task<Either<L, T>>> onright)
@@ -89,7 +87,7 @@ namespace Jal.Monads.Extensions
                 return await onright(e.Right);
             }
 
-            return Either<L, T>.Return(e.Left);
+            return e.Left;
         }
 
         public static async Task<Either<L, T>> MapAsync<L, R, T>(this Task<Either<L, R>> either, Func<R, Task<T>> onright)
@@ -103,12 +101,10 @@ namespace Jal.Monads.Extensions
 
             if (e.IsRight)
             {
-                var t = await onright(e.Right);
-
-                return Either<L, T>.Return(t);
+                return await onright(e.Right);
             }
 
-            return Either<L, T>.Return(e.Left);
+            return e.Left;
         }
 
         public static async Task<Either<L, R>> MonitorAsync<L, R>(this Task<Either<L, R>> either, Action<L> onleft)
@@ -156,12 +152,10 @@ namespace Jal.Monads.Extensions
 
             if (e.IsLeft)
             {
-                var t = onleft(e.Left);
-
-                return Either<T, R>.Return(t);
+                return onleft(e.Left);
             }
 
-            return Either<T, R>.Return(e.Right);
+            return e.Right;
         }
 
         public static async Task<Either<T, R>> BindAsync<L, R, T>(this Task<Either<L, R>> either, Func<L, Either<T, R>> onleft)
@@ -178,7 +172,7 @@ namespace Jal.Monads.Extensions
                 return onleft(e.Left);
             }
 
-            return Either<T, R>.Return(e.Right);
+            return e.Right;
         }
 
         public static async Task<Either<T, R>> MapAsync<L, R, T>(this Task<Either<L, R>> either, Func<L, Task<T>> onleft)
@@ -192,12 +186,10 @@ namespace Jal.Monads.Extensions
 
             if (e.IsLeft)
             {
-                var t = await onleft(e.Left);
-
-                return Either<T, R>.Return(t);
+                return await onleft(e.Left);
             }
 
-            return Either<T, R>.Return(e.Right);
+            return e.Right;
         }
 
         public static async Task<Either<T, R>> BindAsync<L, R, T>(this Task<Either<L, R>> either, Func<L, Task<Either<T, R>>> onleft)
@@ -214,7 +206,7 @@ namespace Jal.Monads.Extensions
                 return await onleft(e.Left);
             }
 
-            return Either<T, R>.Return(e.Right);
+            return e.Right;
         }
 
         public async static Task<Either<L, R>> MonitorAsync<L, R>(this Task<Either<L, R>> either, Action<L> onleft, Action<R> onright)

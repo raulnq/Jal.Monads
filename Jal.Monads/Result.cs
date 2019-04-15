@@ -35,14 +35,14 @@
             return result.Error;
         }
 
-        internal static Result<T, E> Return(T content)
+        public static Result<T, E> Return(T content)
         {
-            return new Result<T, E>(content);
+            return content;
         }
 
-        internal new static Result<T, E> Return(E error)
+        public new static Result<T, E> Return(E error)
         {
-            return new Result<T, E>(error);
+            return error;
         }
     }
 
@@ -50,7 +50,7 @@
     {
         public static Result<E> Failure<E>(E error)
         {
-            return Result<E>.Return(error);
+            return error;
         }
 
         public static Result<E> Success<E>()
@@ -60,12 +60,12 @@
 
         public static Result<T, E> Success<T, E>(T content)
         {
-            return Result<T, E>.Return(content);
+            return content;
         }
 
         public static Result<T, E> Failure<T, E>(E error)
         {
-            return Result<T,E>.Return(error);
+            return error;
         }
     }
 
@@ -99,12 +99,12 @@
             return result.Error;
         }
 
-        internal static Result<E> Return(E error)
+        public static Result<E> Return(E error)
         {
-            return new Result<E>(error);
+            return error;
         }
 
-        internal static Result<E> Return()
+        public static Result<E> Return()
         {
             return new Result<E>();
         }

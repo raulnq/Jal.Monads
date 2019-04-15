@@ -11,30 +11,30 @@ namespace Jal.Monads.Test
     public class OnSuccessTests : AbstractTests
     {
 
-        [TestMethod]
-        public void OnSuccess_WithInputAndAction_ShouldBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnSuccess_WithInputAndAction_ShouldBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = "".ToSuccess<string, Error>();
+        //    var sut = "".ToSuccess<string, Error>();
 
-            var result = sut.OnSuccess(x => { executed = true; });
+        //    var result = sut.OnSuccess(x => { executed = true; });
 
-            SuccessEval(result, executed); 
-        }
+        //    SuccessEval(result, executed); 
+        //}
 
 
-        [TestMethod]
-        public void OnSuccess_WithInputAndAction_ShouldNotBeExecuted()
-        {
-            var executed = false;
+        //[TestMethod]
+        //public void OnSuccess_WithInputAndAction_ShouldNotBeExecuted()
+        //{
+        //    var executed = false;
 
-            var sut = new Error().ToFailure<string, Error>();
+        //    var sut = new Error().ToFailure<string, Error>();
 
-            var result = sut.OnSuccess(x => { executed=true; });
+        //    var result = sut.OnSuccess(x => { executed=true; });
 
-            FailureEval(result, executed);
-        }
+        //    FailureEval(result, executed);
+        //}
 
         [TestMethod]
         public void OnSuccess_WithAction_ShouldBeExecuted()

@@ -7,12 +7,12 @@ namespace Jal.Monads.Extensions
     {
         public static Either<L, R> ToRight<L, R>(this R right)
         {
-            return Either<L, R>.Return(right);
+            return right;
         }
 
         public static Either<L, R> ToLeft<L, R>(this L left)
         {
-            return Either<L, R>.Return(left);
+            return left;
         }
 
         public static T Match<L, R, T>(this Either<L, R> either, Func<L, T> onleft, Func<R, T> onright)
@@ -60,12 +60,10 @@ namespace Jal.Monads.Extensions
 
             if (either.IsRight)
             {
-                var t = onright(either.Right);
-
-                return Either<L, T>.Return(t);
+                return onright(either.Right);
             }
 
-            return Either<L, T>.Return(either.Left);
+            return either.Left;
         }
 
         public static Either<L, T> Bind<L, R, T>(this Either<L, R> either, Func<R, Either<L, T>> onright)
@@ -80,7 +78,7 @@ namespace Jal.Monads.Extensions
                 return onright(either.Right);
             }
 
-            return Either<L, T>.Return(either.Left);
+            return either.Left;
         }
 
         public static Either<L, R> Monitor<L, R>(this Either<L, R> either, Action<L> onleft)
@@ -107,12 +105,10 @@ namespace Jal.Monads.Extensions
 
             if (either.IsLeft)
             {
-                var t = onleft(either.Left);
-
-                return Either<T, R>.Return(t);
+                return onleft(either.Left);
             }
 
-            return Either<T, R>.Return(either.Right);
+            return either.Right;
         }
 
         public static Either<T, R> Bind<L, R, T>(this Either<L, R> either, Func<L, Either<T, R>> onleft)
@@ -127,7 +123,7 @@ namespace Jal.Monads.Extensions
                 return onleft(either.Left);
             }
 
-            return Either<T, R>.Return(either.Right);
+            return either.Right;
         }
 
         public static Either<L, R> Monitor<L, R>(this Either<L, R> either, Action<L> onleft, Action<R> onright)

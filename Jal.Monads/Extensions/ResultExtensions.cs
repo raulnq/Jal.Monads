@@ -2,14 +2,13 @@
 
 namespace Jal.Monads.Extensions
 {
-
-    public static class ResultExtensions
+    public static partial class ResultExtensions
     {
         public static Result<T, E> UnWrap<T, E>(this Result<Maybe<T>, E> result, Func<E> none)
         {
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
-                return result.Content.Match(some => Result.Success<T, E>(some), ()=> Result.Failure<T, E>(none()));
+                return result.Content.Match(some => Result.Success<T, E>(some), () => Result.Failure<T, E>(none()));
             }
 
             return Result.Failure<T, E>(result.Error);
@@ -27,19 +26,22 @@ namespace Jal.Monads.Extensions
 
         public static Result<T, E> ToSuccess<T, E>(this T content)
         {
-            return Result.Success<T, E>(content);
+            return content;
         }
 
         public static Result<T, E> ToFailure<T, E>(this E error)
         {
-            return Result.Failure<T, E>(error);
+            return error;
         }
 
         public static Result<E> ToFailure<E>(this E error)
         {
-            return Result.Failure(error);
+            return error;
         }
+
+
         /************************************/
+
         public static O Match<T, E, O>(this Result<T, E> result, Func<T, O> onsuccess, Func<E, O> onfailure)
         {
             if (onsuccess == null)
@@ -61,55 +63,15 @@ namespace Jal.Monads.Extensions
             }
         }
 
-        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action<T> onsuccess)
+        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action<T> onsuccess=null, Action<E> onfailure=null)
         {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
             if (result.IsSuccess)
             {
-                onsuccess(result.Content);
-            }
-
-            return result;
-        }
-
-        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action<E> onfailure)
-        {
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (!result.IsSuccess)
-            {
-                onfailure(result.Error);
-            }
-
-            return result;
-        }
-
-        public static Result<T, E> Monitor<T, E>(this Result<T, E> result, Action<T> onsuccess, Action<E> onfailure)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsSuccess)
-            {
-                onsuccess(result.Content);
+                onsuccess?.Invoke(result.Content);
             }
             else
             {
-                onfailure(result.Error);
+                onfailure?.Invoke(result.Error);
             }
 
             return result;
@@ -127,7 +89,7 @@ namespace Jal.Monads.Extensions
                 return onsuccess(result.Content);
             }
 
-            return Result.Failure<O, E>(result.Error);
+            return result.Error;
         }
 
         public static Result<E> Bind<T, E>(this Result<T, E> result, Func<T, Result<E>> onsuccess)
@@ -142,10 +104,11 @@ namespace Jal.Monads.Extensions
                 return onsuccess(result.Content);
             }
 
-            return Result.Failure(result.Error);
+            return result.Error;
         }
 
         /************************************/
+
         public static O Match<E, O>(this Result<E> result, Func<O> onsuccess, Func<E, O> onfailure)
         {
             if (onsuccess == null)
@@ -167,55 +130,15 @@ namespace Jal.Monads.Extensions
             }
         }
 
-        public static Result<E> Monitor<E>(this Result<E> result, Action onsuccess)
+        public static Result<E> Monitor<E>(this Result<E> result, Action onsuccess = null, Action<E> onfailure = null)
         {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
             if (result.IsSuccess)
             {
-                onsuccess();
-            }
-
-            return result;
-        }
-
-        public static Result<E> Monitor<E>(this Result<E> result, Action<E> onfailure)
-        {
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (!result.IsSuccess)
-            {
-                onfailure(result.Error);
-            }
-
-            return result;
-        }
-
-        public static Result<E> Monitor<E>(this Result<E> result, Action onsuccess, Action<E> onfailure)
-        {
-            if (onsuccess == null)
-            {
-                throw new ArgumentNullException(nameof(onsuccess));
-            }
-
-            if (onfailure == null)
-            {
-                throw new ArgumentNullException(nameof(onfailure));
-            }
-
-            if (result.IsSuccess)
-            {
-                onsuccess();
+                onsuccess?.Invoke();
             }
             else
             {
-                onfailure(result.Error);
+                onfailure?.Invoke(result.Error);
             }
 
             return result;
@@ -233,7 +156,7 @@ namespace Jal.Monads.Extensions
                 return onsuccess();
             }
 
-            return Result.Failure(result.Error);
+            return result.Error;
         }
 
         public static Result<O, E> Bind<E, O>(this Result<E> result, Func<Result<O, E>> onsuccess)
@@ -248,10 +171,11 @@ namespace Jal.Monads.Extensions
                 return onsuccess();
             }
 
-            return Result.Failure<O, E>(result.Error);
+            return result.Error;
         }
 
         /************************************/
+
         public static O Return<E, O>(this Result<E> result, Func<O> onsuccess, Func<E, O> onfailure)
         {
             return Match(result, onsuccess, onfailure);
@@ -259,12 +183,12 @@ namespace Jal.Monads.Extensions
 
         public static Result<E> OnSuccess<E>(this Result<E> result, Action action)
         {
-            return Monitor(result, action);
+            return Monitor(result, onsuccess: action);
         }
 
         public static Result<E> OnFailure<E>(this Result<E> result, Action<E> action)
         {
-            return Monitor(result, action);
+            return Monitor(result, onfailure: action);
         }
 
         public static Result<E> OnBoth<E>(this Result<E> result, Action onsuccess, Action<E> onfailure)
@@ -283,18 +207,20 @@ namespace Jal.Monads.Extensions
         }
 
         /************************************/
+
         public static O Return<T, E, O>(this Result<T, E> result, Func<T, O> onsuccess, Func<E, O> onfailure)
         {
             return Match(result, onsuccess, onfailure);
         }
+
         public static Result<T, E> OnFailure<T, E>(this Result<T, E> result, Action<E> action)
         {
-            return Monitor(result, action);
+            return Monitor(result, onfailure: action);
         }
 
         public static Result<T, E> OnSuccess<T, E>(this Result<T, E> result, Action<T> onsuccess)
         {
-            return Monitor(result, onsuccess);
+            return Monitor(result, onsuccess: onsuccess);
         }
 
         public static Result<T, E> OnBoth<T, E>(this Result<T, E> result, Action<T> onsuccess, Action<E> onfailure)
@@ -312,7 +238,6 @@ namespace Jal.Monads.Extensions
             return Bind(result, onsuccess);
         }
 
-        /************************************/
         //public static Result Merge(this Result first, Result second)
         //{
         //    if (first.IsSuccess && second.IsSuccess)
