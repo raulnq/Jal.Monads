@@ -6,9 +6,11 @@ Just another library that implement monads
 
 ## Either
 
+## Try
+
 ## Result
 
-The Result monad is like the Either monad but limited to return an array of strings in the left side. I want to explain what we are trying to solve using the following example. Imagine that we need to create a class to do the following:
+The Result monad is like the Either monad but limited to return an error object in the left side. I want to explain what we are trying to solve using the following example. Imagine that we need to create a class to do the following:
 * Search a client by id.
 * Search his account summary.
 * Validate that are enough credit to charge some new amount.
@@ -117,23 +119,7 @@ But in a real application this code is not enough to cover all the possible scen
         }
     }
 
-Now we lost something, the code is not easy to follow like the original one. As you see there a lot of repetitive piece of code suggesting some sort of code smell in our implementation. It's here where the Result class come to rescue us.
-
-    public class Result
-    {
-        public string[] Errors { get; }
-
-        public bool IsSuccess { get; }
-
-        public bool IsFailure => !IsSuccess;
-    }
-
-    public sealed class Result<T> : Result
-    {
-        public T Content { get; }
-    }
- 
-The trick here is start to return the Result class on every method on your code in order to build a chain of execution thanks to the following extension methods:
+Now we lost something, the code is not easy to follow like the original one. As you see there a lot of repetitive piece of code suggesting some sort of code smell in our implementation. It's here where the Result class come to rescue us. The trick here is start to return the Result class on every method on your code in order to build a chain of execution thanks to the following extension methods:
 
 * OnSuccess: The code on this method will be executed only if the IsSuccess flag of the prior execution is true.
 * OnFailure: The code on this method will be executed only if the IsFailure flag of the prior execution is true.
@@ -155,7 +141,7 @@ With this in mind we can simplify our code on something like that
                     }
                     else
                     {
-                        return Result.Failure(new string[] {"Not enough money"});
+                        return Failure(new Error("Not enough money"));
                     }
                 }));
     }
@@ -164,32 +150,32 @@ This requires changes on the original interfaces
 
     public interface IPersonRepository
     {
-        Result<Person> Find(int id);
+        Result<Person, Error> Find(int id);
     }
 
     public interface INotifier
     {
-        Result Notify(Transaction transaction, Person person);
+        Result<Error> Notify(Transaction transaction, Person person);
     }
 
     public interface IBankAccount
     {
-        Result<Transaction> Charge(Person person, decimal amount);
+        Result<Transaction, Error> Charge(Person person, decimal amount);
 
-        Result<AccountSummary> SearchAccountSummary(Person person);
+        Result<AccountSummary, Error> SearchAccountSummary(Person person);
     }
 
 And if we do a small refactoring
 
-    public Result IsThereEnoughMoney(AccountSummary accountsummary, decimal amount)
+    public Result<Error> IsThereEnoughMoney(AccountSummary accountsummary, decimal amount)
     {
         if (accountsummary.Total > amount)
         {
-            return Result.Success();
+            return Success<Error>();
         }
         else
         {
-            return Result.Failure(new string[] { "Not enough money" });
+            return Failure(new Error("Not enough money"));
         }
     }
 

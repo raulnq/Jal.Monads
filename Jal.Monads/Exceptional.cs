@@ -34,5 +34,15 @@ namespace Jal.Monads
         {
             return new Exceptional<T>(exception);
         }
+
+        public static implicit operator Exceptional<T>(T value)
+        {
+            return Return(value);
+        }
+
+        public static implicit operator T(Exceptional<T> exceptional)
+        {
+            return exceptional.Value;
+        }
     }
 }

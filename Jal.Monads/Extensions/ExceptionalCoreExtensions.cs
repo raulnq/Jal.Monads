@@ -1,8 +1,9 @@
 ﻿using System;
 
+
 namespace Jal.Monads.Extensions
 {
-    public static class ExceptionalExtensions
+    public static class ExceptionalCoreExtensions
     {
         public static O Match<T, O>(this Exceptional<T> exceptional, Func<T, O> func, Func<Exception, O> exception)
         {

@@ -15,7 +15,7 @@ namespace Jal.Monads.Test
             
             var sut = 10.ToRight<string, int>();
 
-            var either = sut.Monitor((int right) => { flag = true; });
+            var either = sut.Monitor(onright: (int right) => { flag = true; });
 
             flag.ShouldBeTrue();
 
@@ -35,7 +35,7 @@ namespace Jal.Monads.Test
 
             var sut = "ten".ToLeft<string, int>();
 
-            var result = sut.Monitor((int right) => { flag = true; });
+            var result = sut.Monitor(onright:(int right) => { flag = true; });
 
             flag.ShouldBeFalse();
 

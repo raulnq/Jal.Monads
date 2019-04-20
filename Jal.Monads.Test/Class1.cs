@@ -13,7 +13,7 @@ namespace Jal.Monads.Test
     {
         Person Find(int id);
 
-        Result<Maybe<Person>, Error> FindWithResult(int id);
+        Result<Person, Error> FindWithResult(int id);
     }
 
     public class Person
@@ -41,7 +41,7 @@ namespace Jal.Monads.Test
 
         Result<Transaction, Error> ChargeWithResult(Person person, decimal amount);
 
-        Result<Maybe<AccountSummary>, Error> SearchAccountSummaryWithResult(Person person);
+        Result<AccountSummary, Error> SearchAccountSummaryWithResult(Person person);
     }
 
     public class AccountSummary
@@ -96,29 +96,21 @@ namespace Jal.Monads.Test
 
             INotifier notifier = null;
 
-            return repository.FindWithResult(id)
-                .OnSuccess(maybeperson => maybeperson.Match(person => 
-                {
-                    return bankaccount.SearchAccountSummaryWithResult(person)
-                    .OnSuccess(maybeaccountsummary =>
+            return _repository.FindWithResult(id)
+                .OnSuccess(person => _bankaccount.SearchAccountSummaryWithResult(person)
+                    .OnSuccess(accountsummary =>
                     {
-                        return maybeaccountsummary.Match((accountsummary) =>
+                        if (accountsummary.Total > amount)
                         {
-                            if (accountsummary.Total > amount)
-                            {
-                                return bankaccount.ChargeWithResult(person, amount)
-                                    .OnSuccess(transaction => notifier.NotifyWithResult(transaction, person));
-                            }
-                            else
-                            {
-                                return Failure(new Error());
-                            }
+                            return _bankaccount.ChargeWithResult(person, amount)
+                                .OnSuccess(transaction => notifier.Notify(transaction, person));
 
-                        }, () => Failure(new Error()));
-                    });
-
-
-                }, () => Failure<Person, Error>(new Error())));
+                        }
+                        else
+                        {
+                            return Failure(new Error());
+                        }
+                    }));
         }
 
         public Result<Error> ChargeMoneyWithResultsAndRefactoring(int id, decimal amount)
@@ -131,18 +123,12 @@ namespace Jal.Monads.Test
             INotifier notifier = null;
 
 
-            return repository.FindWithResult(id).UnWrap(() => new Error())
-                .Bind(person => bankaccount.SearchAccountSummaryWithResult(person).UnWrap(() => new Error())
+            return repository.FindWithResult(id)
+                .Bind(person => bankaccount.SearchAccountSummaryWithResult(person)
                     .Bind(accountsummary => IsThereEnoughMoney(accountsummary, amount))
                     .Bind(() => bankaccount.ChargeWithResult(person, amount))
                     .Bind(transaction => notifier.NotifyWithResult(transaction, person))
                     );
-            //return repository.FindWithResult(id)
-            //    .OnSuccess(maybeperson => maybeperson.Match(person=>bankaccount.SearchAccountSummaryWithResult(person)
-            //        .OnSuccess(maybeaccountsummary => maybeaccountsummary.Match(accountsummary=>IsThereEnoughMoney(accountsummary, amount)
-            //        .OnSuccess(() => bankaccount.ChargeWithResult(person, amount))
-            //        .OnSuccess(transaction => notifier.NotifyWithResult(transaction, person))
-            //        , () => Result<Person, Error>.Failure(new Error()))),()=> Result<Person, Error>.Failure(new Error())));
         }
 
         public Result<Error> IsThereEnoughMoney(AccountSummary accountsummary, decimal amount)
@@ -153,7 +139,7 @@ namespace Jal.Monads.Test
             }
             else
             {
-                return Failure(new Error());
+                return new Error();
             }
         }
 

@@ -6,8 +6,6 @@ namespace Jal.Monads
     {
         public static Maybe<T> Some<T>(T value)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
             return Maybe<T>.Return(value);
         }
 
@@ -24,7 +22,8 @@ namespace Jal.Monads
 
         private Maybe(T value)
         {
-
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
             Value = value;
             HasValue = true;
         }
@@ -35,12 +34,12 @@ namespace Jal.Monads
             Value = default(T);
         }
 
-        internal static Maybe<T> Return(T value)
+        public static Maybe<T> Return(T value)
         {
-            return value != null ? new Maybe<T>(value) : None;
+            return new Maybe<T>(value);
         }
 
-        internal static Maybe<T> None => new Maybe<T>();
+        public static Maybe<T> None => new Maybe<T>();
 
         public static implicit operator Maybe<T>(T value)
         {

@@ -3,7 +3,8 @@
 namespace Jal.Monads.Extensions
 {
     public delegate Exceptional<T> Try<T>();
-    public static class TryExtensions
+
+    public static class TryCoreExtensions
     {
         public static Try<T> ToTry<T>(this Func<T> func)
         {
@@ -30,7 +31,7 @@ namespace Jal.Monads.Extensions
                 throw new ArgumentNullException(nameof(func));
             }
 
-            Try<O> f = () => @try.Run().Match<T, Exceptional<O>>(t => func(t).Run(), exception => Exceptional<O>.Return(exception));
+            Try<O> f = () => @try.Run().Match(t => func(t).Run(), exception => Exceptional<O>.Return(exception));
             
             return f;
         }
@@ -42,7 +43,7 @@ namespace Jal.Monads.Extensions
                 throw new ArgumentNullException(nameof(func));
             }
 
-            Try<O> f = () => @try.Run().Match<T, Exceptional<O>>(t => Exceptional<O>.Return(func(t)), exception => Exceptional<O>.Return(exception));
+            Try<O> f = () => @try.Run().Match(t => Exceptional<O>.Return(func(t)), exception => Exceptional<O>.Return(exception));
 
             return f;
         }
