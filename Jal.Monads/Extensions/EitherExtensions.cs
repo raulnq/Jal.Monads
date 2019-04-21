@@ -5,12 +5,12 @@ namespace Jal.Monads.Extensions
 {
     public static class EitherExtensions
     {
-        public static Either<L, R> ToRight<L, R>(this R right)
+        public static Either<L, R> AsRight<L, R>(this R right)
         {
             return right;
         }
 
-        public static Either<L, R> ToLeft<L, R>(this L left)
+        public static Either<L, R> AsLeft<L, R>(this L left)
         {
             return left;
         }

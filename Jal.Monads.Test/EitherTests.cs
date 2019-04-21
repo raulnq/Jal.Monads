@@ -13,7 +13,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
             
-            var sut = 10.ToRight<string, int>();
+            var sut = 10.AsRight<string, int>();
 
             var either = sut.Monitor(onright: (int right) => { flag = true; });
 
@@ -33,7 +33,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = "ten".ToLeft<string, int>();
+            var sut = "ten".AsLeft<string, int>();
 
             var result = sut.Monitor(onright:(int right) => { flag = true; });
 
@@ -53,7 +53,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = 10.ToRight<string, int>();
+            var sut = 10.AsRight<string, int>();
 
             var date = DateTime.Now;
 
@@ -75,11 +75,11 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = 10.ToRight<string, int>();
+            var sut = 10.AsRight<string, int>();
 
             var date = DateTime.Now;
 
-            var result = sut.Bind((int right) => { flag = true; return date.ToRight<string, DateTime>(); });
+            var result = sut.Bind((int right) => { flag = true; return date.AsRight<string, DateTime>(); });
 
             flag.ShouldBeTrue();
 
@@ -97,7 +97,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = "ten".ToLeft<string, int>();
+            var sut = "ten".AsLeft<string, int>();
 
             var date = DateTime.Now;
 
@@ -119,11 +119,11 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = "ten".ToLeft<string, int>();
+            var sut = "ten".AsLeft<string, int>();
 
             var date = DateTime.Now;
 
-            var result = sut.Bind((int right) => { flag = true; return date.ToRight<string, DateTime>(); });
+            var result = sut.Bind((int right) => { flag = true; return date.AsRight<string, DateTime>(); });
 
             flag.ShouldBeFalse();
 
@@ -141,7 +141,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = 10.ToRight<string, int>();
+            var sut = 10.AsRight<string, int>();
 
             var result = sut.Monitor((string left) => { flag = true; });
 
@@ -161,7 +161,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = "ten".ToLeft<string, int>();
+            var sut = "ten".AsLeft<string, int>();
 
             var result = sut.Monitor((string left) => { flag = true; });
 
@@ -181,7 +181,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = 10.ToRight<string, int>();
+            var sut = 10.AsRight<string, int>();
 
             var date = DateTime.Now;
 
@@ -203,7 +203,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = "ten".ToLeft<string, int>();
+            var sut = "ten".AsLeft<string, int>();
 
             var date = DateTime.Now;
 
@@ -227,7 +227,7 @@ namespace Jal.Monads.Test
 
             var lflag = false;
 
-            var sut = 10.ToRight<string, int>();
+            var sut = 10.AsRight<string, int>();
 
             var result = sut.Monitor(left => { lflag = true; }, right => { rflag = true;});
 
@@ -251,7 +251,7 @@ namespace Jal.Monads.Test
 
             var lflag = false;
 
-            var sut = "ten".ToLeft<string, int>();
+            var sut = "ten".AsLeft<string, int>();
 
             var result = sut.Monitor(left => { lflag = true; }, right => { rflag = true; });
 
@@ -275,7 +275,7 @@ namespace Jal.Monads.Test
 
             var lflag = false;
 
-            var sut = "ten".ToLeft<string, int>();
+            var sut = "ten".AsLeft<string, int>();
 
             var result = sut.Match(left => { lflag = true; return "L";  }, right => { rflag = true; return "R"; });
 
@@ -293,7 +293,7 @@ namespace Jal.Monads.Test
 
             var lflag = false;
 
-            var sut = 10.ToRight<string, int>();
+            var sut = 10.AsRight<string, int>();
 
             var result = sut.Match(left => { lflag = true; return "L"; }, right => { rflag = true; return "R"; });
 
@@ -310,7 +310,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = 10.ToRight<string, int>();
+            var sut = 10.AsRight<string, int>();
 
             var result = sut.Monitor(() => { flag = true; });
 
@@ -330,7 +330,7 @@ namespace Jal.Monads.Test
         {
             var flag = false;
 
-            var sut = "ten".ToLeft<string, int>();
+            var sut = "ten".AsLeft<string, int>();
 
             var result = sut.Monitor(() => { flag = true; });
 

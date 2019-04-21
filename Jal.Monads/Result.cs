@@ -12,7 +12,7 @@
 
         private Result(E error) : base(error)
         {
-            Content = default(T);
+            Content = default;
         }
 
         public static implicit operator Result<T, E>(T content)
@@ -80,7 +80,7 @@
         protected Result()
         {
             IsSuccess = true;
-            Error = default(E);
+            Error = default;
         }
 
         protected Result(E error)

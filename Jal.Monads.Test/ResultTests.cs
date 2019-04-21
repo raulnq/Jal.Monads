@@ -46,7 +46,7 @@ namespace Jal.Monads.Test
         [TestMethod]
         public void ToSuccess_WithIntAndNoError_ShouldBeTrue()
         {
-            var sut = 5.ToSuccess<int, string>();
+            var sut = 5.AsSuccess<int, string>();
 
             sut.IsSuccess.ShouldBeTrue();
 
@@ -100,7 +100,7 @@ namespace Jal.Monads.Test
         [TestMethod]
         public void ToFailure_WithIntAndError_ShouldBeTrue()
         {
-            var sut = "error".ToFailure<int, string>();
+            var sut = "error".AsFailure<int, string>();
 
             sut.IsSuccess.ShouldBeFalse();
 
@@ -126,7 +126,7 @@ namespace Jal.Monads.Test
         [TestMethod]
         public void ToFailure_WithError_ShouldBeTrue()
         {
-            var sut = "error".ToFailure();
+            var sut = "error".AsFailure();
 
             sut.IsSuccess.ShouldBeFalse();
 

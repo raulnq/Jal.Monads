@@ -19,9 +19,7 @@ namespace Jal.Monads
 
         private Exceptional(Exception exception)
         {
-            if (exception == null)
-                throw new ArgumentNullException(nameof(exception));
-            Exception = exception;
+            Exception = exception ?? throw new ArgumentNullException(nameof(exception));
             HasException = false;
         }
 

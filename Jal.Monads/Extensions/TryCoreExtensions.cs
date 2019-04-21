@@ -6,7 +6,7 @@ namespace Jal.Monads.Extensions
 
     public static class TryCoreExtensions
     {
-        public static Try<T> ToTry<T>(this Func<T> func)
+        public static Try<T> AsTry<T>(this Func<T> func)
         {
             return () => Exceptional<T>.Return(func());
         }

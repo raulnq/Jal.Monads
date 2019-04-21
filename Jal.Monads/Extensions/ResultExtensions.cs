@@ -5,17 +5,17 @@ namespace Jal.Monads.Extensions
     public static class ResultExtensions
     {
 
-        public static Result<T, E> ToSuccess<T, E>(this T content)
+        public static Result<T, E> AsSuccess<T, E>(this T content)
         {
             return content;
         }
 
-        public static Result<T, E> ToFailure<T, E>(this E error)
+        public static Result<T, E> AsFailure<T, E>(this E error)
         {
             return error;
         }
 
-        public static Result<E> ToFailure<E>(this E error)
+        public static Result<E> AsFailure<E>(this E error)
         {
             return error;
         }

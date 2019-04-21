@@ -26,13 +26,13 @@
         {
             IsRight = false;
             Left = left;
-            Right = default(R);
+            Right = default;
         }
 
         private Either(R right)
         {
             IsRight = true;
-            Left = default(L);
+            Left = default;
             Right = right;
         }
 

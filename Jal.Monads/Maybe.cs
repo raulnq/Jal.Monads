@@ -31,7 +31,7 @@ namespace Jal.Monads
         private Maybe()
         {
             HasValue = false;
-            Value = default(T);
+            Value = default;
         }
 
         public static Maybe<T> Return(T value)
