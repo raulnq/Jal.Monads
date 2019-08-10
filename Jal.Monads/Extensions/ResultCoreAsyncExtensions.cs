@@ -6,7 +6,7 @@ namespace Jal.Monads.Extensions
 {
     public static class ResultCoreAsyncExtensions
     {
-        public static Task<Result<O, E>> Bind<T, E, O>(this Result<T, E> result, Func<T, Task<Result<O, E>>> onsuccess)
+        public static Task<Result<O, E>> BindAsync<T, E, O>(this Result<T, E> result, Func<T, Task<Result<O, E>>> onsuccess)
         {
             if (onsuccess == null)
             {
@@ -21,7 +21,7 @@ namespace Jal.Monads.Extensions
             return Task.FromResult(Failure<O, E>(result.Error));
         }
 
-        public static async Task<Result<O, E>> Bind<T, E, O>(this Task<Result<T, E>> result, Func<T, Task<Result<O, E>>> onsuccess)
+        public static async Task<Result<O, E>> BindAsync<T, E, O>(this Task<Result<T, E>> result, Func<T, Task<Result<O, E>>> onsuccess)
         {
             if (onsuccess == null)
             {
@@ -38,7 +38,7 @@ namespace Jal.Monads.Extensions
             return r.Error;
         }
 
-        public static Task<Result<E>> Bind<E>(this Result<E> result, Func<Task<Result<E>>> onsuccess)
+        public static Task<Result<E>> BindAsync<E>(this Result<E> result, Func<Task<Result<E>>> onsuccess)
         {
             if (onsuccess == null)
             {
@@ -53,7 +53,7 @@ namespace Jal.Monads.Extensions
             return Task.FromResult(Failure(result.Error));
         }
 
-        public static async Task<Result<E>> Bind<E>(this Task<Result<E>> result, Func<Task<Result<E>>> onsuccess)
+        public static async Task<Result<E>> BindAsync<E>(this Task<Result<E>> result, Func<Task<Result<E>>> onsuccess)
         {
             if (onsuccess == null)
             {
@@ -70,7 +70,7 @@ namespace Jal.Monads.Extensions
             return r.Error;
         }
 
-        public static Task<Result<E>> Bind<T, E>(this Result<T, E> result, Func<T, Task<Result<E>>> onsuccess)
+        public static Task<Result<E>> BindAsync<T, E>(this Result<T, E> result, Func<T, Task<Result<E>>> onsuccess)
         {
             if (onsuccess == null)
             {
@@ -85,7 +85,7 @@ namespace Jal.Monads.Extensions
             return Task.FromResult(Failure(result.Error));
         }
 
-        public static Task<Result<O, E>> Bind<E, O>(this Result<E> result, Func<Task<Result<O, E>>> onsuccess)
+        public static Task<Result<O, E>> BindAsync<E, O>(this Result<E> result, Func<Task<Result<O, E>>> onsuccess)
         {
             if (onsuccess == null)
             {
@@ -100,7 +100,7 @@ namespace Jal.Monads.Extensions
             return Task.FromResult(Failure<O, E>(result.Error));
         }
 
-        public static async Task<Result<E>> Bind<T, E>(this Task<Result<T, E>> result, Func<T, Task<Result<E>>> onsuccess)
+        public static async Task<Result<E>> BindAsync<T, E>(this Task<Result<T, E>> result, Func<T, Task<Result<E>>> onsuccess)
         {
             if (onsuccess == null)
             {
@@ -117,7 +117,7 @@ namespace Jal.Monads.Extensions
             return r.Error;
         }
 
-        public static async Task<Result<O, E>> Bind<E, O>(this Task<Result<E>> result, Func<Task<Result<O, E>>> onsuccess)
+        public static async Task<Result<O, E>> BindAsync<E, O>(this Task<Result<E>> result, Func<Task<Result<O, E>>> onsuccess)
         {
             if (onsuccess == null)
             {

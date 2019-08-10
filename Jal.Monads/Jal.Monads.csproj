@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
     <Authors>Raul Naupari</Authors>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <Company>Raul Naupari</Company>
     <Description>Just another library that implement monads</Description>
     <Copyright />
