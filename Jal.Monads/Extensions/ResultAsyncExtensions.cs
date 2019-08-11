@@ -147,11 +147,13 @@ namespace Jal.Monads.Extensions
 
             if (r.IsSuccess)
             {
-                await onsuccess?.Invoke(r.Content);
+                if (onsuccess != null)
+                    await onsuccess?.Invoke(r.Content);
             }
             else
             {
-                await onfailure?.Invoke(r.Error);
+                if (onfailure != null)
+                    await onfailure?.Invoke(r.Error);
             }
 
             return r;
@@ -163,11 +165,13 @@ namespace Jal.Monads.Extensions
 
             if (r.IsSuccess)
             {
-                await onsuccess?.Invoke();
+                if(onsuccess!=null)
+                    await onsuccess.Invoke();
             }
             else
             {
-                await onfailure?.Invoke(r.Error);
+                if (onfailure != null)
+                    await onfailure?.Invoke(r.Error);
             }
 
             return r;
