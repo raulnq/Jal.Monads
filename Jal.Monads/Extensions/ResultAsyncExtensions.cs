@@ -176,5 +176,15 @@ namespace Jal.Monads.Extensions
 
             return r;
         }
+
+        public static Task<O> ReturnAsync<E, O>(this Task<Result<E>> result, Func<O> onsuccess, Func<E, O> onfailure)
+        {
+            return ResultCoreAsyncExtensions.MatchAsync(result, onsuccess, onfailure);
+        }
+
+        public static Task<O> ReturnAsync<T, E, O>(this Task<Result<T, E>> result, Func<T, O> onsuccess, Func<E, O> onfailure)
+        {
+            return ResultCoreAsyncExtensions.MatchAsync(result, onsuccess, onfailure);
+        }
     }
 }

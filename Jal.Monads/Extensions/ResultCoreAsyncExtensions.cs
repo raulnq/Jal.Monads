@@ -6,6 +6,52 @@ namespace Jal.Monads.Extensions
 {
     public static class ResultCoreAsyncExtensions
     {
+        public async static Task<O> MatchAsync<E, O>(this Task<Result<E>> result, Func<O> onsuccess, Func<E, O> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                return onsuccess();
+            }
+            else
+            {
+                return onfailure(r.Error);
+            }
+        }
+
+        public async static Task<O> MatchAsync<T, E, O>(this Task<Result<T, E>> result, Func<T, O> onsuccess, Func<E, O> onfailure)
+        {
+            if (onsuccess == null)
+            {
+                throw new ArgumentNullException(nameof(onsuccess));
+            }
+            if (onfailure == null)
+            {
+                throw new ArgumentNullException(nameof(onfailure));
+            }
+
+            var r = await result;
+
+            if (r.IsSuccess)
+            {
+                return onsuccess(r.Content);
+            }
+            else
+            {
+                return onfailure(r.Error);
+            }
+        }
+
         public static Task<Result<O, E>> BindAsync<T, E, O>(this Result<T, E> result, Func<T, Task<Result<O, E>>> onsuccess)
         {
             if (onsuccess == null)
