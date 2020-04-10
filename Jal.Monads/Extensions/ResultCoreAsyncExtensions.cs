@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using static Jal.Monads.Result;
 
-namespace Jal.Monads.Extensions
+namespace Jal.Monads
 {
     public static class ResultCoreAsyncExtensions
     {

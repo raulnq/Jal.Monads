@@ -1,7 +1,7 @@
 ﻿using System;
 using static Jal.Monads.Maybe;
 
-namespace Jal.Monads.Extensions
+namespace Jal.Monads
 {
     public static class MaybeCoreExtensions
     {

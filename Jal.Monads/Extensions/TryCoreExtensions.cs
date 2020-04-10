@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Jal.Monads.Extensions
+namespace Jal.Monads
 {
     public delegate Exceptional<T> Try<T>();
 

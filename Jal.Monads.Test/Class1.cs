@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Jal.Monads.Extensions;
+using Jal.Monads;
 using static Jal.Monads.Result;
 
 namespace Jal.Monads.Test

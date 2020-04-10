@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Shouldly;
-using Jal.Monads.Extensions;
 using static Jal.Monads.Result;
 
 namespace Jal.Monads.Test

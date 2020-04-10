@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using static Jal.Monads.Extensions.ResultCoreAsyncExtensions;
+using static Jal.Monads.ResultCoreAsyncExtensions;
 
-namespace Jal.Monads.Extensions
+namespace Jal.Monads
 {
 
     public static class ResultAsyncExtensions

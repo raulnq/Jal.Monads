@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Jal.Monads.Extensions
+namespace Jal.Monads
 {
     public static class ExceptionalCoreExtensions
     {
